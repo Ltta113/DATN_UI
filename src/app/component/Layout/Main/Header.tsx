@@ -1,24 +1,47 @@
 "use client";
 
+import CategoryContent from "app/(pages)/home/components/CategoryContent";
 import { useAuth } from "app/context/AuthContext";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { Category } from "app/lib/books";
 
 export default function Header() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const router = useRouter();
 
-  if (pathname === "/login" || pathname === "/signup") {
-    return null;
-  }
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = searchQuery.trim();
+    const params = new URLSearchParams();
+
+    if (query) params.set("query", query);
+    if (selectedCategory) params.set("category", selectedCategory);
+
+    router.push(`/search?${params.toString()}`);
+  };
+
+  const handleSelectCategory = (category: Category) => {
+    setSelectedCategory(category.slug);
+
+    // Optional: nếu muốn filter ngay khi chọn category mà không cần submit
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) params.set("query", searchQuery.trim());
+    params.set("category", category.slug);
+    router.push(`/search?${params.toString()}`);
+  };
+
+  if (pathname === "/login" || pathname === "/signup") return null;
 
   return (
-    <header className="bg-white shadow-xl py-4">
+    <header className="bg-white shadow-xl py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
-        {/* LEFT: Logo + Trang chủ */}
+        {/* LEFT */}
         <div className="flex items-center space-x-6">
           <Link href="/">
             <span className="text-2xl font-bold text-orange-500">SachVN</span>
@@ -33,7 +56,10 @@ export default function Header() {
         </div>
 
         {/* CENTER: Search box */}
-        <div className="relative flex-1 max-w-md mx-auto">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex-1 max-w-md mx-auto"
+        >
           <input
             type="text"
             placeholder="Tên sách, tác giả..."
@@ -57,18 +83,20 @@ export default function Header() {
               ></path>
             </svg>
           </div>
-        </div>
+        </form>
 
-        {/* RIGHT: Auth controls */}
+        {/* RIGHT: Auth */}
         <div className="flex items-center space-x-4">
           {user ? (
             <div
               className="flex items-center space-x-3 cursor-pointer"
               onClick={() => router.push("/profile")}
             >
-              <img
+              <Image
                 src={user.avatar || "/default-avatar.png"}
                 alt="avatar"
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full border border-gray-300"
               />
               <span className="text-gray-700 hidden sm:inline-block">
@@ -92,6 +120,16 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      {/* CATEGORY FILTER */}
+      <main className="container mx-auto w-[80%]">
+        <div className="flex flex-col items-center">
+          <CategoryContent
+            onSelectCategory={handleSelectCategory}
+            selectedCategory={selectedCategory}
+          />
+        </div>
+      </main>
     </header>
   );
 }

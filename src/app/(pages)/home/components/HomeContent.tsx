@@ -1,6 +1,7 @@
 "use client";
 
 import BookShelf from "app/component/BookList/TopSeller/BookSelf";
+import Loading from "app/component/Loading/Loading";
 import BookSlider from "app/component/Slider/TopSlider/ImageSlider";
 import { Book } from "app/lib/books";
 import { useNewestBooks } from "hooks/useGetNewestBook";
@@ -14,7 +15,7 @@ const HomeContent = () => {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Sách mới nhất</h1>
 
-      {isPending && <p className="text-center">Đang tải sách mới...</p>}
+      {isPending && <Loading />}
       {isError && (
         <p className="text-center text-red-500">Có lỗi khi tải dữ liệu!</p>
       )}

@@ -3,6 +3,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Loading from "./Loading/Loading";
 
 export default function ProtectedRoute({
   children,
@@ -21,7 +22,7 @@ export default function ProtectedRoute({
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        Đang tải...
+        <Loading />
       </div>
     );
   }

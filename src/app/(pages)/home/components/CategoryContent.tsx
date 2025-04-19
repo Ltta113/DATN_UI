@@ -1,23 +1,25 @@
 "use client";
 
 import ScrollableCategories from "app/component/CategoryItem/HomeCategory/ScrollableCategories";
+import Loading from "app/component/Loading/Loading";
 import { Category } from "app/lib/books";
 import { useGetCategories } from "hooks/useGetCategories";
-import { useState } from "react";
 
-export default function CategoryContent() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+interface Props {
+  selectedCategory: string;
+  onSelectCategory: (category: Category) => void;
+}
 
+export default function CategoryContent({
+  selectedCategory,
+  onSelectCategory,
+}: Props) {
   const { data, isLoading, isError } = useGetCategories();
-
-  const handleSelectCategory = (category: Category) => {
-    setSelectedCategory(category.slug);
-  };
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        Đang tải...
+        <Loading />
       </div>
     );
   }
@@ -34,7 +36,7 @@ export default function CategoryContent() {
     <ScrollableCategories
       categories={data.data as Category[]}
       selectedCategory={selectedCategory}
-      onSelectCategory={handleSelectCategory}
+      onSelectCategory={onSelectCategory}
     />
   );
 }

@@ -7,6 +7,7 @@ import { useGetCategories } from "hooks/useGetCategories";
 import { useNewestBooks } from "hooks/useGetNewestBook";
 import { Book } from "app/lib/books";
 import { usePathname } from "next/navigation";
+import Loading from "app/component/Loading/Loading";
 
 interface Category {
   slug: string;
@@ -42,13 +43,13 @@ const Footer: React.FC = () => {
 
       <div className="container mx-auto relative z-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
-          <div className="text-right">
+          <div className="text-left">
             <h3 className="text-amber-400 text-xl mb-4 font-bold">
               Danh mục đề xuất
             </h3>
             <ul className="space-y-2">
               {isLoading ? (
-                <li>Đang tải danh mục...</li>
+                <Loading />
               ) : isError ? (
                 <li>Lỗi khi tải danh mục.</li>
               ) : (
@@ -66,14 +67,13 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Cột Sách đề xuất */}
-          <div className="text-right">
+          <div className="text-left">
             <h3 className="text-amber-400 text-xl mb-4 font-bold">
               Sách đề xuất
             </h3>
             <ul className="space-y-2">
               {isBookPending ? (
-                <li>Đang tải danh mục...</li>
+                <Loading />
               ) : isBookError ? (
                 <li>Lỗi khi tải danh mục.</li>
               ) : (
@@ -125,7 +125,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Thông tin footer */}
-        <div className="bg-gray-800 bg-opacity-80 p-6 rounded-lg mb-8 text-right">
+        <div className="bg-gray-800 bg-opacity-80 p-6 rounded-lg mb-8 text-left">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="md:w-1/5 mb-4 md:mb-0">
               <Image

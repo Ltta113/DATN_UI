@@ -4,6 +4,7 @@ import BookCover from "app/component/BookItem/BookDetail/BookCover";
 import BookDescription from "app/component/BookItem/BookDetail/BookDescription";
 import BookDetails from "app/component/BookItem/BookDetail/BookDetail";
 import PriceCard from "app/component/BookItem/BookDetail/PriceCard";
+import Loading from "app/component/Loading/Loading";
 import { Book } from "app/lib/books";
 import { useGetBook } from "hooks/useGetBook";
 
@@ -14,7 +15,7 @@ export default function BookPage({ params }: { params: { slug: string } }) {
 
   const book = data as Book;
 
-  if (isPending) return <div>Đang tải...</div>;
+  if (isPending) return <Loading />;
   if (isError) return <div>{(error as Error).message}</div>;
   if (!book) return <div>Không tìm thấy sách</div>;
 

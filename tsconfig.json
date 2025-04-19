@@ -33,6 +33,6 @@
       "@assets/*": ["./src/assets/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(pages)/authors/[slug]"],
   "exclude": ["node_modules"]
 }

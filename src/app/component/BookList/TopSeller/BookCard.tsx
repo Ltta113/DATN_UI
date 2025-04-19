@@ -7,7 +7,10 @@ const BookCard = ({ book }: { book: Book }) => {
     <div className="flex flex-col items-center cursor-pointer w-[250px]">
       <div className="h-64 w-48 relative shadow-2xl mb-2 overflow-hidden rounded-sm transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl">
         <Image
-          src={book.cover_image}
+          src={
+            book.cover_image ||
+            "https://res.cloudinary.com/dswj1rtvu/image/upload/v1745050814/BookStore/Books/no_cover_available_bjb33v.png"
+          }
           alt={book.title}
           fill
           className="object-cover"

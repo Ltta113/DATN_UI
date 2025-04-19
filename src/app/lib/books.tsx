@@ -24,13 +24,14 @@ interface Publisher {
   logo: string | null;
 }
 
-interface Author {
+export interface Author {
   id: number;
   name: string;
   biography: string | null;
   slug: string;
   photo: string | null;
   birth_date: string | null;
+  book_count: number;
 }
 
 export interface Category {

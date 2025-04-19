@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import Loading from "./Loading/Loading";
 
 export default function GuestRoute({
   children,
@@ -23,7 +24,7 @@ export default function GuestRoute({
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        Đang tải...
+        <Loading />
       </div>
     );
   }
