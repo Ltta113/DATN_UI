@@ -5,7 +5,7 @@ import { useAuth } from "app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Category } from "app/lib/books";
 
 export default function Header() {
@@ -26,14 +26,41 @@ export default function Header() {
     router.push(`/search?${params.toString()}`);
   };
 
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        try {
+          const cart = JSON.parse(storedCart);
+          setCartCount(cart.length);
+        } catch {}
+      } else {
+        setCartCount(0);
+      }
+    };
+
+    updateCartCount();
+
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    return () => {
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
+  }, []);
+
   const handleSelectCategory = (category: Category) => {
     setSelectedCategory(category.slug);
 
-    // Optional: nếu muốn filter ngay khi chọn category mà không cần submit
     const params = new URLSearchParams();
     if (searchQuery.trim()) params.set("query", searchQuery.trim());
     params.set("category", category.slug);
     router.push(`/search?${params.toString()}`);
+  };
+
+  const navigateToCart = () => {
+    router.push("/cart");
   };
 
   if (pathname === "/login" || pathname === "/signup") return null;
@@ -85,8 +112,35 @@ export default function Header() {
           </div>
         </form>
 
-        {/* RIGHT: Auth */}
+        {/* RIGHT: Auth & Cart */}
         <div className="flex items-center space-x-4">
+          {/* Shopping Cart Button */}
+          <button
+            onClick={navigateToCart}
+            className="cursor-pointer flex items-center px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-gray-200 relative"
+            aria-label="Shopping cart"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              ></path>
+            </svg>
+            <span className="ml-2 hidden sm:inline-block">Giỏ hàng</span>
+            {/* Optional: Add a badge for cart items count */}
+            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {cartCount}
+            </span>
+          </button>
+
           {user ? (
             <div
               className="flex items-center space-x-3 cursor-pointer"
@@ -103,7 +157,10 @@ export default function Header() {
                 👋 Xin chào, {user.full_name}
               </span>
               <button
-                onClick={logout}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logout();
+                }}
                 className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
               >
                 Đăng xuất

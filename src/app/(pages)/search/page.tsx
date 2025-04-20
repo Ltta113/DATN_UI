@@ -4,8 +4,10 @@ import Loading from "app/component/Loading/Loading";
 import AuthorsList from "app/component/Search/AuthorList";
 import BookResultList from "app/component/Search/BookResultList";
 import { useSearchResult } from "hooks/useGetSearchResult";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { BiHomeAlt } from "react-icons/bi";
 
 export default function Search() {
   const searchParams = useSearchParams();
@@ -38,6 +40,29 @@ export default function Search() {
 
   return (
     <div className="container mx-auto py-8">
+      <div className="flex items-center mb-6">
+        <Link
+          href="/"
+          className="text-gray-600 hover:text-orange-500 flex items-center"
+        >
+          <BiHomeAlt className="mr-2" />
+          Trang chủ
+        </Link>
+        <span className="mx-2 text-gray-400">/</span>
+        <Link
+          href="/books"
+          className="text-gray-600 hover:text-orange-500 flex items-center"
+        >
+          <span>Sách</span>
+        </Link>
+        <span className="mx-2 text-gray-400">/</span>
+        {debouncedQuery && (
+          <span className="text-gray-800 font-medium">Kết quả tìm kiếm</span>
+        )}
+        {!debouncedQuery && category && (
+          <span className="text-gray-800 font-medium">Danh mục</span>
+        )}
+      </div>
       {debouncedQuery && (
         <h1 className="text-3xl font-bold mb-8 text-center">
           Kết quả tìm kiếm cho &quot;{debouncedQuery}&quot;
@@ -51,7 +76,7 @@ export default function Search() {
           />
         </div>
       )}
-      {isLoading || isPending && debouncedQuery ? (
+      {isLoading || (isPending && debouncedQuery) ? (
         <Loading />
       ) : (
         <BookResultList

@@ -12,6 +12,8 @@ import {
 } from "next/navigation";
 import BookResultList from "app/component/Search/BookResultList";
 import Loading from "app/component/Loading/Loading";
+import Link from "next/link";
+import { BiHomeAlt } from "react-icons/bi";
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "N/A";
@@ -68,6 +70,26 @@ export default function AuthorPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center mb-6">
+            <Link
+              href="/"
+              className="text-gray-600 hover:text-orange-500 flex items-center"
+            >
+              <BiHomeAlt className="mr-2" />
+              Trang chủ
+            </Link>
+            <span className="mx-2 text-gray-400">/</span>
+            <Link
+              href="/authors"
+              className="text-gray-600 hover:text-orange-500 flex items-center"
+            >
+              <span>Tác giả</span>
+            </Link>
+            <span className="mx-2 text-gray-400">/</span>
+            <span className="text-gray-800 font-medium">{author.name}</span>
+          </div>
+        </div>
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <div className="md:flex">
             <div className="md:w-1/4 p-6 flex justify-center">

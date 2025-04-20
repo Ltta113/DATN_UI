@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
                 categoriesToDisplay.map((category) => (
                   <li key={category.slug}>
                     <Link
-                      href={`/category/${category.slug}`}
+                      href={`/search?category=${category.slug}`}
                       className="hover:text-amber-300"
                     >
                       {category.name}
