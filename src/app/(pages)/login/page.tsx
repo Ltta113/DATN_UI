@@ -95,7 +95,7 @@ export default function Login() {
       }}
     >
       <div className="hidden lg:flex lg:w-6/8 relative p-8 items-center justify-center">
-        <div className="relative z-10 w-full h-full flex flex-col items-center text-right p-12">
+        <div className="relative z-10 w-full h-full flex flex-col items-center text-left p-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-6 leading-relaxed">
             Chào mừng trở lại với thư viện sách điện tử
           </h1>
@@ -114,7 +114,7 @@ export default function Login() {
       <div className="w-full lg:w-3/7 bg-white rounded-l-3xl flex flex-col justify-center p-8">
         <div className="max-w-md mx-auto w-full">
           {/* Close button */}
-          <div className="text-right mb-6">
+          <div className="text-left mb-6">
             <button
               className="rounded-full p-2 text-gray-500 hover:bg-gray-100 cursor-pointer"
               onClick={handleClick}
@@ -148,7 +148,7 @@ export default function Login() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 text-right mb-1"
+                className="block text-sm font-medium text-gray-700 text-left mb-1"
               >
                 Địa chỉ email
               </label>
@@ -156,7 +156,7 @@ export default function Login() {
                 <input
                   id="email"
                   type="email"
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-right"
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-left pl-10"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -175,7 +175,7 @@ export default function Login() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 text-right mb-1"
+                className="block text-sm font-medium text-gray-700 text-left mb-1"
               >
                 Mật khẩu
               </label>
@@ -184,7 +184,7 @@ export default function Login() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Nhập mật khẩu của bạn"
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-right"
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-left pl-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
