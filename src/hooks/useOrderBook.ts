@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { AxiosError } from "../types/axios";
+import { Order } from "app/context/OrderContent";
 
 export interface OrderRequest {
     order_items: Array<{
@@ -11,7 +12,7 @@ export interface OrderRequest {
 
 export interface OrderResponse {
     message: string;
-    order: any;
+    order: Order;
 }
 
 const placeOrder = async (
@@ -36,7 +37,7 @@ const placeOrder = async (
     }
 };
 
-export const useCreateOrder = () => {
+export const useCheckOrder = () => {
     return useMutation<OrderResponse, AxiosError, OrderRequest>({
         mutationFn: placeOrder,
     });

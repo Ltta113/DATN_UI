@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import Header from "./component/Layout/Main/Header";
 import { AuthProvider } from "./context/AuthContext";
 import Footer from "./component/Layout/Main/Footer";
+import { OrderProvider } from "./context/OrderContent";
 config.autoAddCss = false;
 
 const geistSans = Geist({
@@ -38,21 +39,23 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            <Header />
-            {children}
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-            <Footer />
+            <OrderProvider>
+              <Header />
+              {children}
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
+              <Footer />
+            </OrderProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

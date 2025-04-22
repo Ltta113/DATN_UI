@@ -19,6 +19,9 @@ export type User = {
   address: string;
   birth_day: string;
   avatar: string;
+  province: string;
+  district: string;
+  ward: string;
 };
 
 type AuthContextType = {

@@ -9,6 +9,7 @@ import {
   FiUser,
   FiHeadphones,
   FiLogOut,
+  FiPackage,
 } from "react-icons/fi";
 import { BsWallet2 } from "react-icons/bs";
 import { useAuth } from "app/context/AuthContext";
@@ -61,6 +62,15 @@ const Sidebar = () => {
               >
                 <BsWallet2 className="mr-3" size={20} />
                 <span>Ví tiền</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/orders"
+                className="flex items-center text-gray-600 hover:text-orange-500"
+              >
+                <FiPackage className="mr-3" size={20} />
+                <span>Đơn hàng của tôi</span>
               </Link>
             </li>
             <li>
