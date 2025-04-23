@@ -13,6 +13,8 @@ const PriceCard = ({ book }: { book: Book }) => {
   const [quantity, setQuantity] = useState(1);
   const [, setCartItem] = useState<(Book & { quantity: number }) | null>(null);
 
+  const isSoldOut = book.status === "sold_out";
+
   const formattedPrice = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
@@ -25,7 +27,7 @@ const PriceCard = ({ book }: { book: Book }) => {
 
   useEffect(() => {
     const checkCartStatus = () => {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
       const bookInCart = cart.find(
         (item: Book & { quantity: number }) => item.id === book.id
       );
@@ -52,7 +54,10 @@ const PriceCard = ({ book }: { book: Book }) => {
   }, [book.id]);
 
   const addToCart = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    // Không cho phép thêm vào giỏ hàng nếu hết hàng
+    if (isSoldOut) return;
+
+    const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
 
     if (!cart.some((item: Book) => item.id === book.id)) {
       const updatedCart = [...cart, { ...book, quantity }];
@@ -65,7 +70,7 @@ const PriceCard = ({ book }: { book: Book }) => {
   };
 
   const removeFromCart = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
     const updatedCart = cart.filter((item: Book) => item.id !== book.id);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setIsInCart(false);
@@ -75,12 +80,14 @@ const PriceCard = ({ book }: { book: Book }) => {
   };
 
   const updateQuantity = (newQuantity: number) => {
+    // Không cho phép cập nhật số lượng nếu hết hàng
+    if (isSoldOut) return;
     if (newQuantity < 1 || newQuantity > book.stock) return;
 
     setQuantity(newQuantity);
 
     if (isInCart) {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
       const updatedCart = cart.map((item: Book & { quantity: number }) =>
         item.id === book.id ? { ...item, quantity: newQuantity } : item
       );
@@ -92,7 +99,14 @@ const PriceCard = ({ book }: { book: Book }) => {
   };
 
   return (
-    <div className="rounded-lg shadow-xl overflow-hidden bg-white border border-gray-200">
+    <div className="rounded-lg shadow-xl overflow-hidden bg-white border border-gray-200 relative">
+      {/* Tag "Hết hàng" hiển thị xéo qua card khi status = sold_out */}
+      {isSoldOut && (
+        <div className="absolute -right-12 top-6 rotate-45 bg-red-600 text-white py-1 w-40 text-center font-bold z-10 shadow-md">
+          HẾT HÀNG
+        </div>
+      )}
+
       <div className="flex items-center p-4 bg-gray-50">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center text-gray-700 gap-2">
@@ -111,19 +125,18 @@ const PriceCard = ({ book }: { book: Book }) => {
         </div>
       </div>
 
-      {/* Quantity selector */}
+      {/* Quantity selector - vô hiệu hóa khi hết hàng */}
       <div className="px-4 pb-3">
         <div className="flex items-center justify-between mb-2">
           <span className="text-gray-700">Số lượng:</span>
           <div className="flex items-center border border-gray-300 rounded-md">
             <button
               onClick={() => updateQuantity(quantity - 1)}
-              disabled={quantity <= 1}
-              className={`px-3 py-1 ${
-                quantity <= 1
+              disabled={quantity <= 1 || isSoldOut}
+              className={`px-3 py-1 ${quantity <= 1 || isSoldOut
                   ? "text-gray-300"
                   : "text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               <BiMinus />
             </button>
@@ -131,21 +144,21 @@ const PriceCard = ({ book }: { book: Book }) => {
               type="number"
               min="1"
               max={book.stock}
-              disabled={book.stock <= 0}
+              disabled={book.stock <= 0 || isSoldOut}
               value={quantity}
               onChange={(e) =>
                 updateQuantity(Math.min(Number(e.target.value), book.stock))
               }
-              className="w-12 text-center border-x border-gray-300 py-1 no-spinner"
+              className={`w-12 text-center border-x border-gray-300 py-1 no-spinner ${isSoldOut ? "bg-gray-100" : ""
+                }`}
             />
             <button
               onClick={() => updateQuantity(quantity + 1)}
-              disabled={quantity >= book.stock}
-              className={`px-3 py-1 ${
-                quantity >= book.stock
+              disabled={quantity >= book.stock || isSoldOut}
+              className={`px-3 py-1 ${quantity >= book.stock || isSoldOut
                   ? "text-gray-300"
                   : "text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               <BiPlus />
             </button>
@@ -166,7 +179,11 @@ const PriceCard = ({ book }: { book: Book }) => {
           <div className="space-y-2">
             <button
               onClick={() => updateQuantity(quantity)}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2"
+              disabled={isSoldOut}
+              className={`w-full border py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 ${isSoldOut
+                  ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300"
+                }`}
             >
               <BiShoppingBag className="w-5 h-5" />
               Cập nhật giỏ hàng
@@ -182,7 +199,11 @@ const PriceCard = ({ book }: { book: Book }) => {
         ) : (
           <button
             onClick={addToCart}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-md"
+            disabled={isSoldOut}
+            className={`w-full py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-md ${isSoldOut
+                ? "bg-gray-400 text-white cursor-not-allowed"
+                : "bg-orange-500 hover:bg-orange-600 text-white"
+              }`}
           >
             <BiShoppingBag className="w-5 h-5" />
             Thêm vào giỏ hàng
@@ -191,7 +212,13 @@ const PriceCard = ({ book }: { book: Book }) => {
       </div>
 
       <div className="px-4 pb-4">
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-lg font-medium transition-colors shadow-md">
+        <button
+          disabled={isSoldOut}
+          className={`w-full py-3 rounded-md text-lg font-medium transition-colors shadow-md ${isSoldOut
+              ? "bg-gray-400 text-white cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
+        >
           Mua ngay
         </button>
       </div>

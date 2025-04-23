@@ -1,5 +1,6 @@
 "use client";
 
+import { Book } from "app/lib/books";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import {
@@ -22,6 +23,7 @@ export type User = {
   province: string;
   district: string;
   ward: string;
+  bookmarks: Book[];
 };
 
 type AuthContextType = {
@@ -60,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     const token = localStorage.getItem("access_token");
-    
+
     if (!token) {
       toast.error("Bạn chưa đăng nhập!");
       return;

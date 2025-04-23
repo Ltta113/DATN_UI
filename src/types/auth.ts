@@ -1,3 +1,5 @@
+import { User } from "app/context/AuthContext";
+
 export interface RegisterCredentials {
   email: string;
   password: string;
@@ -11,15 +13,7 @@ export interface LoginCredentials {
 }
 
 export interface RegisterResponse {
-  user?: {
-    id: string;
-    full_name: string;
-    email: string;
-    phone_number: string;
-    address: string;
-    last_login: string;
-    avatar: string;
-  };
+  user?: User;
   token?: string;
   message?: string;
 }

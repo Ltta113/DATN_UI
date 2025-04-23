@@ -13,6 +13,9 @@ export interface Order {
   payment_method: string;
   note: string;
   order_items_count: number;
+  ward: string;
+  district: string;
+  province: string;
   created_at: string;
   updated_at: string;
 }

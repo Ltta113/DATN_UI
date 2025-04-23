@@ -12,6 +12,7 @@ const useLogout = () => {
       });
 
       localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
 
       router.push("/login");
     } catch {

@@ -5,12 +5,27 @@ import { Book } from "app/lib/books";
 import StarRating from "../BookList/TopSeller/StarRating";
 import { useRouter } from "next/navigation";
 import { FiBookmark, FiShoppingCart } from "react-icons/fi";
+import { useBookmark } from "hooks/useBookmarks";
+import { useAuth } from "app/context/AuthContext";
+import { BsBookmarkFill } from "react-icons/bs";
 
 const BookItem = ({ book }: { book: Book }) => {
   const router = useRouter();
+
+  const mutation = useBookmark();
+
+  const { user } = useAuth();
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    mutation.mutate(String(book.id));
+  };
+
   const handleBookClick = () => {
     router.push(`/books/${book.slug}`);
   };
+
+  const isBookmarked = user?.bookmarks?.some((b) => b.id === book.id);
 
   return (
     <div
@@ -60,9 +75,9 @@ const BookItem = ({ book }: { book: Book }) => {
         <div className="absolute bottom-2 right-2 flex space-x-3">
           <button
             className="p-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition"
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleBookmarkClick}
           >
-            <FiBookmark size={20} />
+            {isBookmarked ? <BsBookmarkFill size={20} className="text-orange-500" /> : <FiBookmark size={20} />}
           </button>
           <button
             className="p-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-300 transition"

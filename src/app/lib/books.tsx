@@ -10,6 +10,7 @@ export interface Book {
   stock: number;
   language: string;
   page_count: number;
+  status: string;
   publisher: Publisher;
   authors: Author[];
   categories: Category[];

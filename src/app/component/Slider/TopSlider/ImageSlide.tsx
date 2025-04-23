@@ -5,12 +5,12 @@ import { Book } from 'app/lib/books';
 
 interface BookSlideProps {
     book: Book;
-    index: number;
+    // index: number;
     isActive: boolean;
     isCentered: boolean;
 }
 
-const BookSlide = ({ book, index, isActive, isCentered }: BookSlideProps) => {
+const BookSlide = ({ book, isActive, isCentered }: BookSlideProps) => {
     const router = useRouter();
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -28,11 +28,11 @@ const BookSlide = ({ book, index, isActive, isCentered }: BookSlideProps) => {
         ${isActive ? 'opacity-100' : 'opacity-80'} w-[calc(30%+15px)] hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             onClick={() => router.push(`/books/${book.id}`)}
             onKeyDown={handleKeyDown}
-            aria-label={`Book: ${book.title} by ${book.author}`}
+            aria-label={`Book: ${book.title} by ${book.authors.map(author => author.name).join(', ')}`}
         >
             <div className={`relative w-full h-48 group ${isCentered ? 'h-56' : 'h-48 mt-2'}`} title={book.title}>
                 <Image
-                    src={book.coverImage}
+                    src={book.cover_image || 'https://res.cloudinary.com/dswj1rtvu/image/upload/v1745050814/BookStore/Books/no_cover_available_bjb33v.png'}
                     alt={`Book cover for ${book.title}`}
                     fill
                     className="rounded-lg object-cover"
@@ -43,11 +43,11 @@ const BookSlide = ({ book, index, isActive, isCentered }: BookSlideProps) => {
                     </h6>
                     <div className="flex justify-between items-center">
                         <p className="text-white text-sm">
-                            {book.author}
+                            {book.authors.map(author => author.name).join(', ')}
                         </p>
                         <div className="flex items-center">
                             <span className="text-yellow-400 mr-1" aria-hidden="true">★</span>
-                            <span className="text-white text-sm">{book.rating}</span>
+                            <span className="text-white text-sm">{5}</span>
                         </div>
                     </div>
                 </div>

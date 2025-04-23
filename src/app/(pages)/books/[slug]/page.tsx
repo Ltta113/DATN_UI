@@ -7,10 +7,14 @@ import Loading from "app/component/Loading/Loading";
 import { Book } from "app/lib/books";
 import { useGetBook } from "hooks/useGetBook";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import React from "react";
 import { BiHomeAlt } from "react-icons/bi";
 
-export default function BookPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default function BookPage() {
+  const params = useParams();
+
+  const slug = params?.slug as string;
 
   const { data, isPending, isError, error } = useGetBook(slug);
 

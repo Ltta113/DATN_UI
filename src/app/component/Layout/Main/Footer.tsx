@@ -22,9 +22,9 @@ const Footer: React.FC = () => {
     isError: isBookError,
   } = useNewestBooks();
 
-  const books = (dataBook?.data || []) as Book[];
+  const books = (dataBook?.data ?? []) as Book[];
 
-  const categories = (data?.data || []) as Category[];
+  const categories = (data?.data ?? []) as Category[];
 
   const categoriesToDisplay = categories.slice(0, 5);
   const booksToDisplay = books.slice(0, 5);
@@ -36,12 +36,12 @@ const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="relative w-full bg-gradient-to-b from-transparent to-gray-800 text-white">
+    <footer className="relative w-full bg-gradient-to-b from-transparent to-gray-800 text-white py-12 mt-auto">
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="w-full h-full bg-[url('/images/book-background.jpg')] bg-cover bg-center opacity-40"></div>
       </div>
 
-      <div className="container mx-auto relative z-10 px-4">
+      <div className="container mx-auto relative z-10 px-4 bottom-0 ">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
           <div className="text-left">
             <h3 className="text-amber-400 text-xl mb-4 font-bold">

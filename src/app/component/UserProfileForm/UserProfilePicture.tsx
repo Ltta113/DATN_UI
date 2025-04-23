@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { FiEdit } from "react-icons/fi";
+// import { FiEdit } from "react-icons/fi";
 
 interface UserProfileAvatarProps {
   imageUrl: string;

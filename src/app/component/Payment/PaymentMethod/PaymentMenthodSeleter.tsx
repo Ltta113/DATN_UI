@@ -63,7 +63,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
             Thanh toán qua Payos
           </div>
           <p className="text-sm text-gray-600">
-            Thanh toán trực tuyến bằng thẻ tín dụng/ghi nợ
+            Thanh toán trực tuyến bằng payos
           </p>
         </div>
       </div>

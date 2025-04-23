@@ -18,8 +18,6 @@ export default function UserOrderList() {
 
   const orders = (data as Order[]) || [];
 
-  console.log("order", data);
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN", {
@@ -157,7 +155,8 @@ export default function UserOrderList() {
                   <div>
                     <p className="text-sm text-gray-500">Địa chỉ</p>
                     <p className="text-sm font-medium text-ellipsis overflow-hidden">
-                      {order.address}
+                      {order.address}, {order.ward}, {order.district},{" "}
+                      {order.province}
                     </p>
                   </div>
                 </div>

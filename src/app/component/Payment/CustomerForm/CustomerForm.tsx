@@ -1,6 +1,9 @@
+"use client";
+
 import { useAuth } from "app/context/AuthContext";
 import { OrderErrors } from "hooks/useCreateOrder";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { locations } from "util/VietNam";
 
 export type CustomerInfo = {
   full_name: string;
@@ -24,19 +27,21 @@ const CustomerInfoForm = ({
 }) => {
   const { user } = useAuth();
 
-  console.log("CustomerInfoForm", errors);
-
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ): void => {
     const { name, value } = e.target;
+    console.log("name", name);
+    console.log("value", value);
     setCustomerInfo((prev: CustomerInfo) => ({
       ...prev,
       [name]: value,
     }));
   };
+
+  console.log("customerInfo", customerInfo);
 
   useEffect(() => {
     if (user) {
@@ -53,10 +58,56 @@ const CustomerInfoForm = ({
     }
   }, [setCustomerInfo, user]);
 
-  // Helper function to render error messages
   const renderError = (fieldErrors?: string[]) => {
     if (!fieldErrors || fieldErrors.length === 0) return null;
     return <div className="text-red-500 text-sm mt-1">{fieldErrors[0]}</div>;
+  };
+
+  const [provinces, setProvinces] = useState<string[]>([]);
+  const [districts, setDistricts] = useState<string[]>([]);
+  const [wards, setWards] = useState<string[]>([]);
+
+  // Lấy dữ liệu tỉnh từ locations.js
+  useEffect(() => {
+    setProvinces(locations.provinces.map((province) => province.name));
+  }, []);
+
+  const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const provinceName = e.target.value;
+    const province = locations.provinces.find(p => p.name === provinceName);
+    if (province) {
+      setCustomerInfo((prev) => ({
+        ...prev,
+        province: provinceName,
+      }));
+      setDistricts(province.districts.map(district => district.name));
+    }
+  };
+
+  const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const districtName = e.target.value;
+    const district = districts.find(d => d === districtName);
+    if (district) {
+      setCustomerInfo((prev) => ({
+        ...prev,
+        district: districtName,
+      }));
+      const selectedProvince = locations.provinces.find(p => p.name === customerInfo.province);
+      if (selectedProvince) {
+        const selectedDistrict = selectedProvince.districts.find(d => d.name === districtName);
+        if (selectedDistrict) {
+          setWards(selectedDistrict.wards.map(ward => ward.name));
+        }
+      }
+    }
+  };
+
+  const handleWardChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const wardName = e.target.value;
+    setCustomerInfo((prev) => ({
+      ...prev,
+      ward: wardName,
+    }));
   };
 
   return (
@@ -74,9 +125,8 @@ const CustomerInfoForm = ({
           name="full_name"
           value={customerInfo.full_name}
           onChange={handleInputChange}
-          className={`w-full px-3 py-2 border ${
-            errors?.errors?.name ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
+          className={`w-full px-3 py-2 border ${errors?.errors?.name ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
           required
         />
         {renderError(errors?.errors?.name)}
@@ -96,9 +146,8 @@ const CustomerInfoForm = ({
             name="email"
             value={customerInfo.email}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border ${
-              errors?.errors?.email ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
+            className={`w-full px-3 py-2 border ${errors?.errors?.email ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
             required
           />
           {renderError(errors?.errors?.email)}
@@ -116,9 +165,8 @@ const CustomerInfoForm = ({
             name="phone_number"
             value={customerInfo.phone_number}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border ${
-              errors?.errors?.phone ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
+            className={`w-full px-3 py-2 border ${errors?.errors?.phone ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
             required
           />
           {renderError(errors?.errors?.phone)}
@@ -138,78 +186,71 @@ const CustomerInfoForm = ({
           name="address"
           value={customerInfo.address}
           onChange={handleInputChange}
-          className={`w-full px-3 py-2 border ${
-            errors?.errors?.address ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
+          className={`w-full px-3 py-2 border ${errors?.errors?.address ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
           required
         />
         {renderError(errors?.errors?.address)}
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label
-            htmlFor="city"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Tỉnh/Thành phố <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="city"
-            name="city"
-            value={customerInfo.province}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-            required
-          >
-            <option value="">Chọn tỉnh/thành</option>
-            <option value="HN">Hà Nội</option>
-            <option value="HCM">TP. Hồ Chí Minh</option>
-            <option value="DN">Đà Nẵng</option>
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="district"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Quận/Huyện <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="district"
-            name="district"
-            value={customerInfo.district}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-            required
-          >
-            <option value="">Chọn quận/huyện</option>
-            <option value="Q1">Quận 1</option>
-            <option value="Q2">Quận 2</option>
-            <option value="Q3">Quận 3</option>
-          </select>
-        </div>
-        <div>
-          <label
-            htmlFor="ward"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Phường/Xã <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="ward"
-            name="ward"
-            value={customerInfo.ward}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-            required
-          >
-            <option value="">Chọn phường/xã</option>
-            <option value="P1">Phường 1</option>
-            <option value="P2">Phường 2</option>
-            <option value="P3">Phường 3</option>
-          </select>
-        </div>
+      <div>
+        <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
+          Tỉnh/Thành phố <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="province"
+          name="province"
+          value={customerInfo.province}
+          onChange={handleProvinceChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
+        >
+          {provinces.map((province) => (
+            <option key={province} value={province}>
+              {province}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="district" className="block text-sm font-medium text-gray-700 mb-1">
+          Quận/Huyện <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="district"
+          name="district"
+          value={customerInfo.district}
+          onChange={handleDistrictChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
+        >
+          {districts.map((district) => (
+            <option key={district} value={district}>
+              {district}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="ward" className="block text-sm font-medium text-gray-700 mb-1">
+          Phường/Xã <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="ward"
+          name="ward"
+          value={customerInfo.ward}
+          onChange={handleWardChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
+        >
+          {wards.map((ward) => (
+            <option key={ward} value={ward}>
+              {ward}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -225,9 +266,8 @@ const CustomerInfoForm = ({
           value={customerInfo.notes}
           onChange={handleInputChange}
           rows={3}
-          className={`w-full px-3 py-2 border ${
-            errors?.errors?.note ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
+          className={`w-full px-3 py-2 border ${errors?.errors?.note ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500`}
           placeholder="Thông tin bổ sung về đơn hàng..."
         ></textarea>
         {renderError(errors?.errors?.note)}

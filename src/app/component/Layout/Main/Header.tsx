@@ -35,7 +35,7 @@ export default function Header() {
         try {
           const cart = JSON.parse(storedCart);
           setCartCount(cart.length);
-        } catch {}
+        } catch { }
       } else {
         setCartCount(0);
       }
@@ -147,7 +147,7 @@ export default function Header() {
               onClick={() => router.push("/profile")}
             >
               <Image
-                src={user.avatar || "/default-avatar.png"}
+                src={user.avatar || "https://res.cloudinary.com/dswj1rtvu/image/upload/v1745051027/BookStore/Authors/istockphoto-1451587807-612x612_f8h3fr.jpg"}
                 alt="avatar"
                 width={32}
                 height={32}

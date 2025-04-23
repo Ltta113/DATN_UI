@@ -48,7 +48,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
       <form onSubmit={handleSubmit}>
         {/* Họ và tên */}
         <div className="mb-6">
-          <label className="block text-left text-gray-700 mb-2">
+          <label htmlFor="full_name" className="block text-left text-gray-700 mb-2">
             Họ và tên
           </label>
           <div className="bg-gray-100 rounded-lg flex items-center">
@@ -66,7 +66,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
         {/* Số điện thoại */}
         <div className="mb-6">
-          <label className="block text-left text-gray-700 mb-2">
+          <label htmlFor="phone_number" className="block text-left text-gray-700 mb-2">
             Số điện thoại
           </label>
           <div className="bg-gray-100 rounded-lg flex items-center">
@@ -84,7 +84,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
         {/* Email */}
         <div className="mb-6">
-          <label className="block text-left text-gray-700 mb-2">Email</label>
+          <label htmlFor="email" className="block text-left text-gray-700 mb-2">Email</label>
           <div className="bg-gray-100 rounded-lg flex items-center">
             <FiMail className="text-gray-500 mx-3" />
             <input
@@ -100,7 +100,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
         {/* Địa chỉ */}
         <div className="mb-6">
-          <label className="block text-left text-gray-700 mb-2">Địa chỉ</label>
+          <label htmlFor="address" className="block text-left text-gray-700 mb-2">Địa chỉ</label>
           <div className="bg-gray-100 rounded-lg flex items-center">
             <FiMapPin className="text-gray-500 mx-3" />
             <input
@@ -116,7 +116,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
 
         {/* Ngày sinh */}
         <div className="mb-6">
-          <label className="block text-left text-gray-700 mb-2">
+          <label htmlFor="birth_day" className="block text-left text-gray-700 mb-2">
             Ngày sinh
           </label>
           <div className="bg-gray-100 rounded-lg flex items-center">
