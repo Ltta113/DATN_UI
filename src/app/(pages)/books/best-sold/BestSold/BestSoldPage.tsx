@@ -3,13 +3,13 @@
 import Loading from "app/component/Loading/Loading";
 import BookResultList from "app/component/Search/BookResultList";
 import { Book } from "app/lib/books";
-import { useNewestBooks } from "hooks/useGetNewestBook";
+import { useBestSoldBooks } from "hooks/useGetBestSoldBook";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BiHomeAlt } from "react-icons/bi";
 
-export default function Search() {
+export default function BestSoldPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -20,7 +20,7 @@ export default function Search() {
 
     const [isChangingPage, setIsChangingPage] = useState(false);
 
-    const { data, isPending, isError, refetch } = useNewestBooks(currentPage);
+    const { data, isPending, isError, refetch } = useBestSoldBooks(currentPage);
     const books = data?.data as Book[];
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function Search() {
                 <span className="text-gray-800 font-medium">Sách</span>
             </div>
             <h1 className="text-3xl font-bold mb-8 text-center">
-                Danh sách sách mới nhất
+                Danh sách sách bán chạy nhất
             </h1>
             {(() => {
                 if (isError) {

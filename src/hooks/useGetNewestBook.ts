@@ -7,11 +7,13 @@ const fetchNewestBooks = async (page: number, limit: number = 10): Promise<Respo
     `${process.env.NEXT_PUBLIC_API_URL}/books?page=${page}&limit=${limit}`,
   );
   return response.data;
+
 };
 
 export const useNewestBooks = (page: number = 1, limit: number = 10) => {
   return useQuery<ResponseData>({
-    queryKey: ["newestBooks"],
+    queryKey: ["newestBooks", page, limit],
     queryFn: () => fetchNewestBooks(page, limit),
+    staleTime: 1000 * 60 * 5, 
   });
 };

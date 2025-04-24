@@ -5,7 +5,6 @@ import { Book } from 'app/lib/books';
 
 interface BookSlideProps {
     book: Book;
-    // index: number;
     isActive: boolean;
     isCentered: boolean;
 }
@@ -24,30 +23,40 @@ const BookSlide = ({ book, isActive, isCentered }: BookSlideProps) => {
         <div
             role="button"
             tabIndex={0}
-            className={`cursor-pointer flex-none transition-all duration-500 mx-2.5 relative mt-5
-        ${isActive ? 'opacity-100' : 'opacity-80'} w-[calc(30%+15px)] hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            className={`cursor-pointer transition-all duration-500 relative
+        ${isActive ? 'opacity-100' : 'opacity-80'} 
+        w-full hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             onClick={() => router.push(`/books/${book.id}`)}
             onKeyDown={handleKeyDown}
             aria-label={`Book: ${book.title} by ${book.authors.map(author => author.name).join(', ')}`}
         >
-            <div className={`relative w-full h-48 group ${isCentered ? 'h-56' : 'h-48 mt-2'}`} title={book.title}>
+            <div
+                className={`relative w-full ${isCentered ? 'h-96' : 'h-80'} group`}
+                title={book.title}
+            >
                 <Image
-                    src={book.cover_image || 'https://res.cloudinary.com/dswj1rtvu/image/upload/v1745050814/BookStore/Books/no_cover_available_bjb33v.png'}
+                    src={
+                        book.cover_image ||
+                        'https://res.cloudinary.com/dswj1rtvu/image/upload/v1745050814/BookStore/Books/no_cover_available_bjb33v.png'
+                    }
                     alt={`Book cover for ${book.title}`}
                     fill
                     className="rounded-lg object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 flex flex-col justify-center px-2.5 py-2">
-                    <h6 className={`text-white font-semibold truncate ${isCentered ? 'text-xl' : 'text-lg'}`}>
+                {/* Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 py-3 rounded-b-lg">
+                    <h6
+                        className={`text-white font-semibold truncate ${isCentered ? 'text-xl' : 'text-lg'}`}
+                    >
                         {book.title}
                     </h6>
-                    <div className="flex justify-between items-center">
-                        <p className="text-white text-sm">
-                            {book.authors.map(author => author.name).join(', ')}
+                    <div className="flex justify-between items-center mt-1">
+                        <p className="text-white text-sm truncate max-w-[70%]">
+                            {book.authors.map((author) => author.name).join(', ')}
                         </p>
-                        <div className="flex items-center">
-                            <span className="text-yellow-400 mr-1" aria-hidden="true">★</span>
-                            <span className="text-white text-sm">{5}</span>
+                        <div className="flex items-center text-sm text-yellow-400">
+                            <span className="mr-1">★</span>
+                            <span className="text-white">5</span>
                         </div>
                     </div>
                 </div>
@@ -55,6 +64,5 @@ const BookSlide = ({ book, isActive, isCentered }: BookSlideProps) => {
         </div>
     );
 };
-
 
 export default BookSlide;

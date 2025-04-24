@@ -33,15 +33,11 @@ const CustomerInfoForm = ({
     >
   ): void => {
     const { name, value } = e.target;
-    console.log("name", name);
-    console.log("value", value);
     setCustomerInfo((prev: CustomerInfo) => ({
       ...prev,
       [name]: value,
     }));
   };
-
-  console.log("customerInfo", customerInfo);
 
   useEffect(() => {
     if (user) {
@@ -67,7 +63,6 @@ const CustomerInfoForm = ({
   const [districts, setDistricts] = useState<string[]>([]);
   const [wards, setWards] = useState<string[]>([]);
 
-  // Lấy dữ liệu tỉnh từ locations.js
   useEffect(() => {
     setProvinces(locations.provinces.map((province) => province.name));
   }, []);

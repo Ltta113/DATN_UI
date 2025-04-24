@@ -51,11 +51,20 @@ export default function Header() {
   }, []);
 
   const handleSelectCategory = (category: Category) => {
-    setSelectedCategory(category.slug);
-
+    const isSameCategory = selectedCategory === category.slug;
     const params = new URLSearchParams();
-    if (searchQuery.trim()) params.set("query", searchQuery.trim());
-    params.set("category", category.slug);
+
+    if (searchQuery.trim()) {
+      params.set("query", searchQuery.trim());
+    }
+
+    if (isSameCategory) {
+      setSelectedCategory("");
+    } else {
+      setSelectedCategory(category.slug);
+      params.set("category", category.slug);
+    }
+
     router.push(`/search?${params.toString()}`);
   };
 
@@ -161,7 +170,7 @@ export default function Header() {
                   e.stopPropagation();
                   logout();
                 }}
-                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 cursor-pointer"
               >
                 Đăng xuất
               </button>

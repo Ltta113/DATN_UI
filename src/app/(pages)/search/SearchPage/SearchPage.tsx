@@ -38,6 +38,12 @@ export default function Search() {
         );
     };
 
+    if (!query && !category) {
+        router.push("/books");
+        return null;
+    }
+
+
     return (
         <div className="container mx-auto py-8">
             <div className="flex items-center mb-6">

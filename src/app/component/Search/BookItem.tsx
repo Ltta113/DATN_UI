@@ -14,7 +14,7 @@ const BookItem = ({ book }: { book: Book }) => {
 
   const mutation = useBookmark();
 
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -25,7 +25,7 @@ const BookItem = ({ book }: { book: Book }) => {
     router.push(`/books/${book.slug}`);
   };
 
-  const isBookmarked = user?.bookmarks?.some((b) => b.id === book.id);
+  const isBookmarked = !loading && user?.bookmarks?.some((b) => b.id === book.id);
 
   return (
     <div
