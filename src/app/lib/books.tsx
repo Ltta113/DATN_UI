@@ -1,3 +1,5 @@
+import { User } from "app/context/AuthContext";
+
 export interface Book {
   id: number;
   title: string;
@@ -14,8 +16,19 @@ export interface Book {
   publisher: Publisher;
   authors: Author[];
   categories: Category[];
+  star_rating: number;
+  review_count: number;
+  reviews: Review[];
 }
 
+export interface Review {
+  id: number;
+  rating: number;
+  content: string | null;
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
 interface Publisher {
   id: number;
   name: string;

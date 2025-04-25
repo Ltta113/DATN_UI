@@ -4,6 +4,8 @@ import BookCover from "app/component/BookItem/BookDetail/BookCover";
 import BookDetails from "app/component/BookItem/BookDetail/BookDetail";
 import PriceCard from "app/component/BookItem/BookDetail/PriceCard";
 import Loading from "app/component/Loading/Loading";
+import ProductReview from "app/component/Rating/ProductReview";
+import { useAuth } from "app/context/AuthContext";
 import { Book } from "app/lib/books";
 import { useGetBook } from "hooks/useGetBook";
 import Link from "next/link";
@@ -18,11 +20,17 @@ export default function BookPage() {
 
   const { data, isPending, isError, error } = useGetBook(slug);
 
+  const { user } = useAuth();
+
   const book = data as Book;
 
   if (isPending) return <Loading />;
   if (isError) return <div>{(error as Error).message}</div>;
   if (!book) return <div>Không tìm thấy sách</div>;
+
+  
+  const reviewData = book.reviews.find((review) => review.user.id === user?.id);
+  console.log("Book data:", reviewData);
 
   return (
     <div className="min-h-screen rtl w-[80%] mx-auto">
@@ -57,6 +65,10 @@ export default function BookPage() {
             <PriceCard book={book} />
           </div>
         </div>
+      </div>
+      <div className="bg-gray-100 rounded-lg shadow-md px-4 py-8 mx-4">
+        <ProductReview reviews={book.reviews} reviewableType="book" reviewableId={book.id} slug={book.slug} start_rating={book.star_rating}
+          dataReview={reviewData} />
       </div>
     </div>
   );

@@ -3,6 +3,12 @@ import { FiFlag, FiSend, FiShoppingBag, FiStar } from "react-icons/fi";
 import { Book } from "app/lib/books";
 
 const BookDetails = ({ book }: { book: Book }) => {
+
+  const formatRating = new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+  });
+
   const authorNames = book.authors.map((author) => author.name).join(", ");
   const categoryNames = book.categories
     .map((category) => category.name)
@@ -22,7 +28,9 @@ const BookDetails = ({ book }: { book: Book }) => {
 
       <div className="border-t border-b border-gray-200 my-6 py-4">
         <div className="flex justify-start items-center">
-          <span className="mr-2">Rating: 4.7</span>
+          <span className="mr-2">
+            Rating: {formatRating.format(book.star_rating ?? 0)}
+          </span>
           <FiStar className="w-5 h-5 fill-yellow-400 text-yellow-400" />
         </div>
       </div>

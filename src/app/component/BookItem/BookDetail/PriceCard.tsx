@@ -134,8 +134,8 @@ const PriceCard = ({ book }: { book: Book }) => {
               onClick={() => updateQuantity(quantity - 1)}
               disabled={quantity <= 1 || isSoldOut}
               className={`px-3 py-1 ${quantity <= 1 || isSoldOut
-                  ? "text-gray-300"
-                  : "text-gray-700 hover:bg-gray-100"
+                ? "text-gray-300"
+                : "text-gray-700 hover:bg-gray-100"
                 }`}
             >
               <BiMinus />
@@ -156,8 +156,8 @@ const PriceCard = ({ book }: { book: Book }) => {
               onClick={() => updateQuantity(quantity + 1)}
               disabled={quantity >= book.stock || isSoldOut}
               className={`px-3 py-1 ${quantity >= book.stock || isSoldOut
-                  ? "text-gray-300"
-                  : "text-gray-700 hover:bg-gray-100"
+                ? "text-gray-300"
+                : "text-gray-700 hover:bg-gray-100"
                 }`}
             >
               <BiPlus />
@@ -180,9 +180,9 @@ const PriceCard = ({ book }: { book: Book }) => {
             <button
               onClick={() => updateQuantity(quantity)}
               disabled={isSoldOut}
-              className={`w-full border py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 ${isSoldOut
-                  ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
-                  : "bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300"
+              className={`w-full border py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer ${isSoldOut
+                ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300"
                 }`}
             >
               <BiShoppingBag className="w-5 h-5" />
@@ -190,7 +190,7 @@ const PriceCard = ({ book }: { book: Book }) => {
             </button>
             <button
               onClick={removeFromCart}
-              className="w-full bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 py-2 rounded-md text-base font-medium transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 py-2 rounded-md text-base font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <BiTrash className="w-5 h-5" />
               Xóa khỏi giỏ hàng
@@ -200,9 +200,9 @@ const PriceCard = ({ book }: { book: Book }) => {
           <button
             onClick={addToCart}
             disabled={isSoldOut}
-            className={`w-full py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-md ${isSoldOut
-                ? "bg-gray-400 text-white cursor-not-allowed"
-                : "bg-orange-500 hover:bg-orange-600 text-white"
+            className={`w-full py-3 rounded-md text-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer ${isSoldOut
+              ? "bg-gray-400 text-white cursor-not-allowed"
+              : "bg-orange-500 hover:bg-orange-600 text-white"
               }`}
           >
             <BiShoppingBag className="w-5 h-5" />
@@ -214,9 +214,9 @@ const PriceCard = ({ book }: { book: Book }) => {
       <div className="px-4 pb-4">
         <button
           disabled={isSoldOut}
-          className={`w-full py-3 rounded-md text-lg font-medium transition-colors shadow-md ${isSoldOut
-              ? "bg-gray-400 text-white cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
+          className={`w-full cursor-pointer py-3 rounded-md text-lg font-medium transition-colors shadow-md ${isSoldOut
+            ? "bg-gray-400 text-white cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700 text-white"
             }`}
         >
           Mua ngay
