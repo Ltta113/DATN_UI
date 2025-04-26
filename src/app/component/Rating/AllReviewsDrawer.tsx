@@ -175,14 +175,14 @@ export const AllReviewsDrawer: React.FC<AllReviewsDrawerProps> = ({
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
+                    <div className="w-10 rounded-full mr-3">
                       {review.user.avatar ? (
                         <Image
                           src={review.user.avatar}
                           alt={review.user.full_name}
-                          width={40}
-                          height={40}
-                          className="object-cover"
+                          width={60}
+                          height={60}
+                          className="rounded-full object-cover object-center scale-110"
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600">

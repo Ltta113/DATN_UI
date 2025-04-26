@@ -20,7 +20,7 @@ export default function BookResultList({
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-2xl font-bold mb-8 pl-10 pr-10">
-        {message || "Sách liên quan"}
+        {message ?? "Sách liên quan"}
       </h1>
       {books && books.length > 0 ? (
         <>

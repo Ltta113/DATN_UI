@@ -14,6 +14,9 @@ import BookResultList from "app/component/Search/BookResultList";
 import Loading from "app/component/Loading/Loading";
 import Link from "next/link";
 import { BiHomeAlt } from "react-icons/bi";
+import ProductReview from "app/component/Rating/ProductReview";
+import { useAuth } from "app/context/AuthContext";
+import { FiStar } from "react-icons/fi";
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "N/A";
@@ -29,6 +32,11 @@ interface AuthorResponse {
   author: Author;
   books: Book[];
 }
+
+const formatRating = new Intl.NumberFormat('en-US', {
+  maximumFractionDigits: 1,
+  minimumFractionDigits: 0,
+});
 
 export default function AuthorPage() {
   const searchParams = useSearchParams();
@@ -48,6 +56,10 @@ export default function AuthorPage() {
   );
 
   const author = (data?.data as AuthorResponse)?.author || null;
+
+  const { user } = useAuth();
+
+  const reviewData = author?.reviews.find((review) => review.user.id === user?.id);
 
   useEffect(() => {
     if (page !== prevPage) {
@@ -120,6 +132,17 @@ export default function AuthorPage() {
                   {author.book_count}
                 </span>
               </div>
+              <div className="flex items-center mb-4">
+                <div className="flex justify-start items-center">
+                  <span className="mr-2">
+                    Rating: {formatRating.format(author.star_rating ?? 0)}
+                  </span>
+                  <FiStar className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                </div>
+                <span className="text-gray-600 pl-1">
+                  ({author.reviews.length} đánh giá)
+                </span>
+              </div>
               <div className="mb-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-2">
                   Tiểu sử
@@ -131,6 +154,11 @@ export default function AuthorPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg shadow-md px-4 py-8 mx-4">
+          <ProductReview reviews={author.reviews} reviewableType="author" reviewableId={author.id} slug={author.slug} start_rating={author.star_rating}
+            dataReview={reviewData} />
         </div>
 
         <BookResultList

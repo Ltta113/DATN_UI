@@ -46,6 +46,9 @@ export interface Author {
   photo: string | null;
   birth_date: string | null;
   book_count: number;
+  star_rating: number;
+  review_count: number;
+  reviews: Review[];
 }
 
 export interface Category {

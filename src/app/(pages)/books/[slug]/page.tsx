@@ -30,7 +30,6 @@ export default function BookPage() {
 
   
   const reviewData = book.reviews.find((review) => review.user.id === user?.id);
-  console.log("Book data:", reviewData);
 
   return (
     <div className="min-h-screen rtl w-[80%] mx-auto">

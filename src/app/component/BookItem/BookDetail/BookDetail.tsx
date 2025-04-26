@@ -32,6 +32,9 @@ const BookDetails = ({ book }: { book: Book }) => {
             Rating: {formatRating.format(book.star_rating ?? 0)}
           </span>
           <FiStar className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+          <span className="text-gray-600 pl-1">
+            ({book.reviews.length} đánh giá)
+          </span>
         </div>
       </div>
 

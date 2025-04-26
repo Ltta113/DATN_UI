@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "app/component/Loading/Loading";
+import DualRangeSlider from "app/component/ProgressBar/DualRangeSlider";
 import BookResultList from "app/component/Search/BookResultList";
 import { Book } from "app/lib/books";
 import { useNewestBooks } from "hooks/useGetNewestBook";
@@ -16,12 +17,22 @@ export default function Search() {
 
     const currentPage = Number(searchParams?.get("page") || "1");
 
+    const rangeMin = Number(searchParams?.get("rangeMin") || 0);
+    const rangeMax = Number(searchParams?.get("rangeMax") || 2500000);
+
     const [prevPage, setPrevPage] = useState(currentPage);
 
     const [isChangingPage, setIsChangingPage] = useState(false);
 
-    const { data, isPending, isError, refetch } = useNewestBooks(currentPage);
+    const { data, isPending, isError, refetch, error } = useNewestBooks(currentPage, 10, rangeMin, rangeMax);
     const books = data?.data as Book[];
+
+    const handleChangeProgress = ({ min, max }: { min: number, max: number }) => {
+        const params = new URLSearchParams(searchParams?.toString());
+        params.set("rangeMin", min.toString());
+        params.set("rangeMax", max.toString());
+        router.push(`${pathname}?${params.toString()}`);
+    };
 
     useEffect(() => {
         if (currentPage !== prevPage) {
@@ -60,13 +71,20 @@ export default function Search() {
             <h1 className="text-3xl font-bold mb-8 text-center">
                 Danh sách sách mới nhất
             </h1>
+            <DualRangeSlider
+                min={0}
+                max={2500000}
+                defaultMin={rangeMin >= rangeMax ? undefined : rangeMin}
+                defaultMax={rangeMin >= rangeMax ? undefined : rangeMax}
+                onChange={handleChangeProgress}
+            />
             {(() => {
                 if (isError) {
-                    return (
-                        <p className="text-center">
-                            Có lỗi xảy ra khi tải dữ liệu. Vui lòng thử lại sau.
+                    return <p className="container mx-auto py-8 text-center">
+                        <p className="text-red-500">
+                            {(error as any)?.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau."}
                         </p>
-                    );
+                    </p>;
                 } else if (isLoading) {
                     return <Loading />;
                 } else {
