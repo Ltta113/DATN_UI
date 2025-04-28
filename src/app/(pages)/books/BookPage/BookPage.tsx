@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "app/component/Loading/Loading";
+import PaymentSelector from "app/component/Payment/PaymentSelector/PaymentSelector";
 import DualRangeSlider from "app/component/ProgressBar/DualRangeSlider";
 import BookResultList from "app/component/Search/BookResultList";
 import { Book } from "app/lib/books";
@@ -78,6 +79,7 @@ export default function Search() {
                 defaultMax={rangeMin >= rangeMax ? undefined : rangeMax}
                 onChange={handleChangeProgress}
             />
+            <PaymentSelector />
             {(() => {
                 if (isError) {
                     return <p className="container mx-auto py-8 text-center">
