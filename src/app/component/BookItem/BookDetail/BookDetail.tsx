@@ -1,28 +1,55 @@
 import React from "react";
+import Link from "next/link";
 import { FiFlag, FiSend, FiShoppingBag, FiStar } from "react-icons/fi";
 import { Book } from "app/lib/books";
 
 const BookDetails = ({ book }: { book: Book }) => {
-
-  const formatRating = new Intl.NumberFormat('en-US', {
+  const formatRating = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 1,
     minimumFractionDigits: 0,
   });
-
-  const authorNames = book.authors.map((author) => author.name).join(", ");
-  const categoryNames = book.categories
-    .map((category) => category.name)
-    .join(", ");
 
   return (
     <div className="flex-1">
       <h1 className="text-2xl font-bold mb-6 text-left">{book.title}</h1>
 
       <div className="space-y-3">
-        <DetailRow label="Tác giả" value={authorNames} />
-        {/* <DetailRow label="Ngôn ngữ" value={book.isbn || ""} /> */}
-        <DetailRow label="Danh mục" value={categoryNames} />
-        {/* <DetailRow label="Format" value="EPUB" /> */}
+        <DetailRow
+          label="Tác giả"
+          value={
+            <>
+              {book.authors.map((author, index) => (
+                <span key={author.id}>
+                  <Link
+                    href={`/authors/${author.slug}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {author.name}
+                  </Link>
+                  {index < book.authors.length - 1 && ", "}
+                </span>
+              ))}
+            </>
+          }
+        />
+        <DetailRow
+          label="Danh mục"
+          value={
+            <>
+              {book.categories.map((category, index) => (
+                <span key={category.id}>
+                  <Link
+                    href={`/search?category=${category.slug}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {category.name}
+                  </Link>
+                  {index < book.categories.length - 1 && ", "}
+                </span>
+              ))}
+            </>
+          }
+        />
         <DetailRow label="Số trang" value={book.page_count.toString()} />
       </div>
 
@@ -55,9 +82,15 @@ const BookDetails = ({ book }: { book: Book }) => {
   );
 };
 
-const DetailRow = ({ label, value }: { label: string; value: string }) => {
+const DetailRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) => {
   return (
-    <div className="flex justify-start items-center">
+    <div className="flex justify-start items-center flex-wrap">
       <span className="font-medium text-gray-700">{label}:</span>
       <span className="ml-2 text-gray-500">{value}</span>
     </div>

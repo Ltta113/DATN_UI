@@ -14,25 +14,25 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
     <div className="space-y-3">
       <div
         className={`border ${
-          selected === "cod"
+          selected === "wallet"
             ? "border-orange-500 bg-orange-50"
             : "border-gray-300"
         } rounded-md p-3 flex items-center cursor-pointer`}
-        onClick={() => onChange("cod")}
+        onClick={() => onChange("wallet")}
       >
         <div
           className={`w-5 h-5 rounded-full border ${
-            selected === "cod" ? "border-orange-500" : "border-gray-400"
+            selected === "wallet" ? "border-orange-500" : "border-gray-400"
           } flex items-center justify-center`}
         >
-          {selected === "cod" && (
+          {selected === "wallet" && (
             <div className="w-3 h-3 rounded-full bg-orange-500"></div>
           )}
         </div>
         <div className="ml-3 flex-1">
           <div className="font-medium flex items-center">
             <FaMoneyBillWave className="text-green-600 mr-2" />
-            Thanh toán khi nhận hàng (COD)
+            Thanh toán bằng tiền trong ví
           </div>
           <p className="text-sm text-gray-600">
             Thanh toán bằng tiền mặt khi nhận hàng
@@ -42,28 +42,28 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
 
       <div
         className={`border ${
-          selected === "payos"
+          selected === "zalopay"
             ? "border-orange-500 bg-orange-50"
             : "border-gray-300"
         } rounded-md p-3 flex items-center cursor-pointer`}
-        onClick={() => onChange("payos")}
+        onClick={() => onChange("zalopay")}
       >
         <div
           className={`w-5 h-5 rounded-full border ${
-            selected === "payos" ? "border-orange-500" : "border-gray-400"
+            selected === "zalopay" ? "border-orange-500" : "border-gray-400"
           } flex items-center justify-center`}
         >
-          {selected === "payos" && (
+          {selected === "zalopay" && (
             <div className="w-3 h-3 rounded-full bg-orange-500"></div>
           )}
         </div>
         <div className="ml-3 flex-1">
           <div className="font-medium flex items-center">
             <FaCreditCard className="text-blue-600 mr-2" />
-            Thanh toán qua Payos
+            Thanh toán qua zalopay
           </div>
           <p className="text-sm text-gray-600">
-            Thanh toán trực tuyến bằng payos
+            Thanh toán trực tuyến bằng zalopay
           </p>
         </div>
       </div>

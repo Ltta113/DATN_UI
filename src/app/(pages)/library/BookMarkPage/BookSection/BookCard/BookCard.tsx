@@ -9,7 +9,7 @@ interface BookCardProps {
 
 const BookCard = ({ book }: BookCardProps) => {
     return (
-        <Link href={`/book/${book.id}`}>
+        <Link href={`/books/${book.slug}`}>
             <div className="flex flex-col items-center transition-transform hover:scale-105">
                 <div className="relative w-full h-64 overflow-hidden rounded-lg shadow-md mb-2">
                     <Image

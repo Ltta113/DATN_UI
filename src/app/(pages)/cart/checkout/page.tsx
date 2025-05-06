@@ -20,7 +20,7 @@ export default function OrderConfirmationPage() {
   const { order: orderData, setOrderData } = useOrder();
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState("wallet");
   const [errorData, setErrorData] = useState<OrderErrors>({
     message: "",
     errors: {},
@@ -79,21 +79,24 @@ export default function OrderConfirmationPage() {
       district: customerInfo.district || "",
       ward: customerInfo.ward || "",
     };
+    console.log("paymentMethod", paymentMethod);
     createOrder(orderDataToSubmit, {
       onSuccess: (data) => {
-        setOrderData(data.order);
+        setOrderData(data.data);
         setIsProcessing(false);
         toast.success("Đặt hàng thành công!");
-        if (paymentMethod === "payos") {
+        if (paymentMethod === "zalopay") {
           window.location.href = data.checkoutUrl ?? "/";
+        } else {
+          window.location.href = `${window.location.origin}/order-result?status=1&amount=${data.data.total_amount}&apptransid=${data.data.order_code}&bankcode=0`;
         }
       },
       onError: (data) => {
         setIsProcessing(false);
 
         setErrorData(data?.response?.data as OrderErrors);
-
-        toast.error("Đặt hàng thất bại. Vui lòng thử lại!");
+        toast.error("eweqeqwe");
+        toast.error(data?.response?.data.message);
       },
     });
   };

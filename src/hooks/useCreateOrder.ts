@@ -21,7 +21,7 @@ export interface OrderCreateRequest {
 
 export interface OrderResponse {
   message: string;
-  order: Order;
+  data: Order;
   checkoutUrl?: string;
 }
 

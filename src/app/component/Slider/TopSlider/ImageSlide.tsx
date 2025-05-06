@@ -26,7 +26,7 @@ const BookSlide = ({ book, isActive, isCentered }: BookSlideProps) => {
             className={`cursor-pointer transition-all duration-500 relative
         ${isActive ? 'opacity-100' : 'opacity-80'} 
         w-full hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            onClick={() => router.push(`/books/${book.id}`)}
+            onClick={() => router.push(`/books/${book.slug}`)}
             onKeyDown={handleKeyDown}
             aria-label={`Book: ${book.title} by ${book.authors.map(author => author.name).join(', ')}`}
         >

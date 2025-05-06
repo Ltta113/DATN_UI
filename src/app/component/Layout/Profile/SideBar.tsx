@@ -84,11 +84,11 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                href="/support"
+                href="/notifications"
                 className="flex items-center text-gray-600 hover:text-orange-500"
               >
                 <FiHeadphones className="mr-3" size={20} />
-                <span>Liên hệ hỗ trợ</span>
+                <span>Thông báo của tôi</span>
               </Link>
             </li>
             <li>

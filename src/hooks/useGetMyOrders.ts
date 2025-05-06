@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { OrderItem } from "app/context/OrderContent";
 import axios from "axios";
 import { ResponseData } from "types/responseData";
 
@@ -16,6 +17,8 @@ export interface Order {
   ward: string;
   district: string;
   province: string;
+  order_items: OrderItem[];
+  order_code: string;
   created_at: string;
   updated_at: string;
 }

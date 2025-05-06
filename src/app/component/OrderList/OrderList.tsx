@@ -12,9 +12,11 @@ import {
   FiDollarSign,
 } from "react-icons/fi";
 import Loading from "../Loading/Loading";
+import { useRouter } from "next/navigation";
 
 export default function UserOrderList() {
   const { data, isPending } = useGetMyOrders();
+  const router = useRouter();
 
   const orders = (data as Order[]) || [];
 
@@ -33,11 +35,23 @@ export default function UserOrderList() {
         return "Chờ xử lý";
       case "processing":
         return "Đang xử lý";
+      case "out_of_stock":
+        return "Hết hàng";
+      case "refunded":
+        return "Đã hoàn tiền";
+      case "need_refund":
+        return "Cần hoàn tiền";
+      case "completed":
+        return "Đã hoàn thành";
+      case "admin_canceled":
+        return "Đã hủy bởi admin";
       case "shipped":
         return "Đang giao hàng";
       case "paid":
         return "Đã thanh toán";
-      case "cancelled":
+      case "received":
+        return "Đã nhận hàng";
+      case "canceled":
         return "Đã hủy";
       default:
         return status;
@@ -54,8 +68,20 @@ export default function UserOrderList() {
         return "bg-indigo-100 text-indigo-800";
       case "paid":
         return "bg-green-100 text-green-800";
-      case "cancelled":
+      case "canceled":
         return "bg-red-100 text-red-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "out_of_stock":
+        return "bg-red-100 text-red-800";
+      case "refunded":
+        return "bg-gray-100 text-gray-800";
+      case "need_refund":
+        return "bg-orange-100 text-orange-800";
+      case "admin_canceled":
+        return "bg-red-100 text-red-800";
+      case "received":
+        return "bg-green-100 text-green-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -63,16 +89,16 @@ export default function UserOrderList() {
 
   const getPaymentMethodTranslation = (method: string) => {
     switch (method) {
-      case "cod":
-        return "Thanh toán khi nhận hàng";
+      case "wallet":
+        return "Ví tiền";
       case "bank_transfer":
         return "Chuyển khoản ngân hàng";
       case "credit_card":
         return "Thẻ tín dụng";
       case "momo":
         return "Ví MoMo";
-      case "payos":
-        return "PayOS";
+      case "zalopay":
+        return "Zalopay";
       default:
         return method;
     }
@@ -189,7 +215,10 @@ export default function UserOrderList() {
                 )}
               </div>
 
-              <button className="w-full cursor-pointer text-center mt-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition">
+              <button
+                onClick={() => router.push(`/orders/${order.id}`)}
+                className="w-full cursor-pointer text-center mt-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition"
+              >
                 Xem Chi Tiết
               </button>
             </div>

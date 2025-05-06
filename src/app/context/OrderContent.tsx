@@ -17,6 +17,8 @@ export interface Order {
   total_amount: number;
   status: string;
   order_items: OrderItem[];
+  payment_method: string;
+  order_code: string;
   created_at: string;
   updated_at: string;
 }
