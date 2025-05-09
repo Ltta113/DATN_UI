@@ -67,6 +67,33 @@ const CustomerInfoForm = ({
     setProvinces(locations.provinces.map((province) => province.name));
   }, []);
 
+  useEffect(() => {
+    if (customerInfo.province) {
+      const selectedProvince = locations.provinces.find(
+        (province) => province.name === customerInfo.province
+      );
+      if (selectedProvince) {
+        setDistricts(selectedProvince.districts.map((district) => district.name));
+      }
+    }
+  }, [customerInfo.province]);
+
+  useEffect(() => {
+    if (customerInfo.district) {
+      const selectedProvince = locations.provinces.find(
+        (province) => province.name === customerInfo.province
+      );
+      if (selectedProvince) {
+        const selectedDistrict = selectedProvince.districts.find(
+          (district) => district.name === customerInfo.district
+        );
+        if (selectedDistrict) {
+          setWards(selectedDistrict.wards.map((ward) => ward.name));
+        }
+      }
+    }
+  }, [customerInfo.district, customerInfo.province]);
+
   const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const provinceName = e.target.value;
     const province = locations.provinces.find(p => p.name === provinceName);

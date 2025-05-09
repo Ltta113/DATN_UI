@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  BiMinus,
-  BiPlus,
   BiTrash,
   BiArrowBack,
   BiHomeAlt,
@@ -205,7 +203,27 @@ export default function CartPage() {
   const calculateSubtotal = () => {
     return cartItems
       .filter((item) => item.selected)
+      .reduce(
+        (total, item) => total + Number(item.final_price) * item.quantity,
+        0
+      );
+  };
+
+  const calculatePricetotal = () => {
+    return cartItems
+      .filter((item) => item.selected)
       .reduce((total, item) => total + Number(item.price) * item.quantity, 0);
+  };
+
+  const calculateDistotal = () => {
+    return cartItems
+      .filter((item) => item.selected)
+      .reduce(
+        (total, item) =>
+          total +
+          (Number(item.price) - Number(item.final_price)) * item.quantity,
+        0
+      );
   };
 
   const getSelectedCount = () => {
@@ -395,82 +413,83 @@ export default function CartPage() {
                         )}
                       </div>
 
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4">
-                        <div className="flex items-center">
-                          <span className="text-gray-700 mr-2">Số lượng:</span>
-                          <div
-                            className={`flex items-center border rounded-md ${
-                              hasItemError(item.id)
-                                ? "border-red-300"
-                                : "border-gray-300"
-                            }`}
-                          >
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
-                              className={`px-2 py-1 ${
-                                item.quantity <= 1
-                                  ? "text-gray-300"
-                                  : "text-gray-700 hover:bg-gray-100"
-                              }`}
-                              disabled={item.quantity <= 1}
-                            >
-                              <BiMinus />
-                            </button>
-                            <input
-                              type="number"
-                              min="1"
-                              value={item.quantity}
-                              max={
-                                hasItemError(item.id)
-                                  ? getItemStock(item.id)
-                                  : undefined
-                              }
-                              onChange={(e) =>
-                                updateQuantity(item.id, Number(e.target.value))
-                              }
-                              className={`w-12 text-center border-x py-1 no-spinner ${
-                                hasItemError(item.id)
-                                  ? "border-red-300 bg-red-50"
-                                  : "border-gray-300"
-                              }`}
-                            />
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              className={`px-2 py-1 hover:bg-gray-100 ${
-                                hasItemError(item.id) &&
-                                item.quantity >= getItemStock(item.id)
-                                  ? "text-gray-300"
-                                  : "text-gray-700"
-                              }`}
-                              disabled={
-                                hasItemError(item.id) &&
-                                item.quantity >= getItemStock(item.id)
-                              }
-                            >
-                              <BiPlus />
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto mt-3 sm:mt-0">
-                          <div className="sm:mr-6">
-                            <div className="text-orange-600 font-bold">
+                      <div className="flex-1 flex items-center justify-between mt-4">
+                        {item.discount && (
+                          <div className="mt-1">
+                            <span className="font-semibold text-red-600">
+                              {formatPrice(Number(item.final_price))}
+                            </span>
+                            <span className="text-gray-500 text-sm line-through ml-2">
                               {formatPrice(Number(item.price))}
-                            </div>
-                            <div className="text-gray-600 text-sm">
-                              {formatPrice(Number(item.price) * item.quantity)}
-                            </div>
+                            </span>
                           </div>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="text-red-600 hover:text-red-800 p-1"
-                          >
-                            <BiTrash size={20} />
-                          </button>
+                        )}
+
+                        {!item.discount && (
+                          <div className="mt-1">
+                            <span className="font-semibold text-red-600">
+                              {formatPrice(Number(item.price))}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between py-3">
+                          {/* Điều khiển số lượng và nút xóa */}
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center border border-gray-300 rounded">
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity - 1)
+                                }
+                                className={`px-2 py-1 text-gray-700 ${
+                                  item.quantity <= 1
+                                    ? "text-gray-300 cursor-not-allowed"
+                                    : "hover:bg-gray-100"
+                                }`}
+                                disabled={item.quantity <= 1}
+                              >
+                                <span className="text-lg font-medium">−</span>
+                              </button>
+
+                              <input
+                                type="number"
+                                min="1"
+                                value={item.quantity}
+                                onChange={(e) =>
+                                  updateQuantity(
+                                    item.id,
+                                    Number(e.target.value)
+                                  )
+                                }
+                                className="w-8 text-center border-x border-gray-300 py-1 no-spinner"
+                              />
+
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity + 1)
+                                }
+                                className="px-2 py-1 text-gray-700 hover:bg-gray-100"
+                              >
+                                <span className="text-lg font-medium">+</span>
+                              </button>
+                            </div>
+
+                            {/* Giá hiện tại */}
+                            <div className="font-semibold text-red-600 ml-4">
+                              {formatPrice(
+                                Number(item.final_price) * item.quantity
+                              )}
+                            </div>
+
+                            {/* Nút xóa */}
+                            <button
+                              onClick={() => removeItem(item.id)}
+                              className="ml-3 text-gray-500 hover:text-gray-700"
+                              aria-label="Xóa sản phẩm"
+                            >
+                              <BiTrash className="w-5 h-5" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -515,12 +534,14 @@ export default function CartPage() {
                       Tạm tính ({getSelectedCount()} sản phẩm)
                     </span>
                     <span className="font-medium">
-                      {formatPrice(calculateSubtotal())}
+                      {formatPrice(calculatePricetotal())}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Giảm giá</span>
-                    <span className="font-medium">0 ₫</span>
+                    <span className="font-medium">
+                      {formatPrice(calculateDistotal())}
+                    </span>
                   </div>
                 </div>
 

@@ -23,6 +23,7 @@ export interface User {
     province: string;
     district: string;
     ward: string;
+    wallet: number;
     bookmarks: Book[];
 }
 
@@ -35,7 +36,7 @@ export const useGetProfile = () => {
                 if (!token) return null;
 
                 const res = await api.get("/user/profile");
-                return res.data;
+                return res.data.data as User;
             } catch (err) {
                 console.error("Lỗi khi lấy profile:", err);
                 return null;

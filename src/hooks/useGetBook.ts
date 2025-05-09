@@ -6,7 +6,7 @@ const fetchBookBySlug = async (slug: string): Promise<ResponseData> => {
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/books/${slug}`
   );
-  return response.data.data;
+  return response.data;
 };
 
 export const useGetBook = (slug: string) => {

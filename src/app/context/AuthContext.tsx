@@ -24,6 +24,7 @@ export type User = {
   district: string;
   ward: string;
   bookmarks: Book[];
+  wallet: number;
 };
 
 type AuthContextType = {
@@ -44,6 +45,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      localStorage.removeItem("user");
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));

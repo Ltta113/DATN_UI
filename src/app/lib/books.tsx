@@ -19,6 +19,19 @@ export interface Book {
   star_rating: number;
   review_count: number;
   reviews: Review[];
+  final_price: string;
+  discount: Discount;
+}
+
+export interface Discount {
+  id: number;
+  name: string;
+  description: string | null;
+  starts_at: string;
+  expires_at: string;
+  type: 'percent' | 'amount';
+  value: number;
+  books: Book[];
 }
 
 export interface Review {

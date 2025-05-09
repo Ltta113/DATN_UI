@@ -3,6 +3,7 @@
 import BookCover from "app/component/BookItem/BookDetail/BookCover";
 import BookDetails from "app/component/BookItem/BookDetail/BookDetail";
 import PriceCard from "app/component/BookItem/BookDetail/PriceCard";
+import BookCards from "app/component/BookList/BookList5/BookList5";
 import Loading from "app/component/Loading/Loading";
 import ProductReview from "app/component/Rating/ProductReview";
 import { useAuth } from "app/context/AuthContext";
@@ -22,13 +23,12 @@ export default function BookPage() {
 
   const { user } = useAuth();
 
-  const book = data as Book;
+  const book = data?.data as Book;
 
   if (isPending) return <Loading />;
   if (isError) return <div>{(error as Error).message}</div>;
   if (!book) return <div>Không tìm thấy sách</div>;
 
-  
   const reviewData = book.reviews.find((review) => review.user.id === user?.id);
 
   return (
@@ -66,9 +66,21 @@ export default function BookPage() {
         </div>
       </div>
       <div className="bg-gray-100 rounded-lg shadow-md px-4 py-8 mx-4">
-        <ProductReview reviews={book.reviews} reviewableType="book" reviewableId={book.id} slug={book.slug} start_rating={book.star_rating}
-          dataReview={reviewData} />
+        <ProductReview
+          reviews={book.reviews}
+          reviewableType="book"
+          reviewableId={book.id}
+          slug={book.slug}
+          start_rating={book.star_rating}
+          dataReview={reviewData}
+        />
       </div>
+
+      {data.recommendations && (
+        <div className="bg-gray-100 rounded-lg shadow-md px-4 py-8 mx-4 mt-6">
+          <BookCards title="Có thể bạn thích" books={data.recommendations as Book[]} />
+        </div>
+      )}
     </div>
   );
 }
