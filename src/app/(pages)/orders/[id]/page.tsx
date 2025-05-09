@@ -388,10 +388,8 @@ export default function OrderDetail() {
                         <div className="flex items-center">
                           <div className="h-16 w-12 flex-shrink-0 mr-4 bg-gray-200 rounded overflow-hidden">
                             <Image
-                              src={
-                                item.book_image || "/api/placeholder/100/160"
-                              }
-                              alt={item.book_name}
+                              src={item.image || "/api/placeholder/100/160"}
+                              alt={item.name}
                               className="h-full w-full object-cover"
                               width={100}
                               height={160}
@@ -399,9 +397,9 @@ export default function OrderDetail() {
                             />
                           </div>
                           <div>
-                            <p className="font-medium">{item.book_name}</p>
+                            <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-gray-500">
-                              Mã: {item.book_id}
+                              Mã: {item.orderable_id}
                             </p>
                           </div>
                         </div>

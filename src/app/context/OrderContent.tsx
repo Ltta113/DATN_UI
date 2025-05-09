@@ -1,14 +1,17 @@
 "use client";
 
+import { Book } from "app/lib/books";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 export interface OrderItem {
   id: number;
-  book_id: number;
-  book_name: string;
-  book_image: string;
+  orderable_type: string;
+  orderable_id: number;
+  name: string;
+  image: string;
   quantity: number;
   price: string;
+  books?: Book[];
 }
 
 export interface Order {
