@@ -215,7 +215,6 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-xl py-4 sticky top-0 z-50">
-      <script src="https://cdn.payos.vn/payos-checkout/v1/stable/payos-initialize.js"></script>
       <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
         {/* LEFT */}
         <div className="flex items-center space-x-6">

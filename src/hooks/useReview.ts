@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 
 type ReviewData = {
-    reviewable_type: 'book' | 'author' | 'order',
+    reviewable_type: 'book' | 'author' | 'order'| 'combo',
     reviewable_id: number,
     content: string,
     rating: number,

@@ -1,8 +1,8 @@
 "use client";
 
-import BookCover from "app/component/BookItem/BookDetail/BookCover";
 import BookDetails from "app/component/BookItem/BookDetail/BookDetail";
 import PriceCard from "app/component/BookItem/BookDetail/PriceCard";
+import BookCombos from "app/component/BookItem/BookDetail/BookCombos";
 import BookCards from "app/component/BookList/BookList5/BookList5";
 import Loading from "app/component/Loading/Loading";
 import ProductReview from "app/component/Rating/ProductReview";
@@ -54,11 +54,7 @@ export default function BookPage() {
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
-            <div className="flex flex-col md:flex-row gap-6 bg-gray-100 p-6 rounded-lg shadow-md">
-              <BookCover book={book} />
-              <BookDetails book={book} />
-            </div>
-            {/* <BookDescription book={book} /> */}
+            <BookDetails book={book} />
           </div>
           <div className="lg:w-1/3">
             <PriceCard book={book} />
@@ -78,8 +74,15 @@ export default function BookPage() {
 
       {data.recommendations && (
         <div className="bg-gray-100 rounded-lg shadow-md px-4 py-8 mx-4 mt-6">
-          <BookCards title="Có thể bạn thích" books={data.recommendations as Book[]} />
+          <BookCards
+            title="Có thể bạn thích"
+            books={data.recommendations as Book[]}
+          />
         </div>
+      )}
+
+      {book.combos && book.combos.length > 0 && (
+        <BookCombos combos={book.combos} />
       )}
     </div>
   );

@@ -63,7 +63,7 @@ export default function BookCards({ title, books }: Props) {
               {/* Content */}
               <div className="p-4 flex-1 flex flex-col">
                 {/* Title */}
-                {title && (
+                {book.title && (
                   <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 h-12">
                     {book.title}
                   </h3>

@@ -14,7 +14,8 @@ export interface OrderCreateRequest {
   payment_method: string;
   note?: string;
   order_items: Array<{
-    book_id: number;
+    orderable_id: number;
+    orderable_type: string;
     quantity: number;
   }>;
 }

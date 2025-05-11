@@ -1,5 +1,6 @@
 "use client";
 
+import { Combo } from "app/component/Payment/OrderSummery/OrderSummery";
 import { Book } from "app/lib/books";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
@@ -11,7 +12,8 @@ export interface OrderItem {
   image: string;
   quantity: number;
   price: string;
-  books?: Book[];
+  book?: Book[];
+  combo?: Combo[];
 }
 
 export interface Order {

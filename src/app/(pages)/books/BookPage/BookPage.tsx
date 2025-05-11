@@ -1,7 +1,6 @@
 "use client";
 
 import Loading from "app/component/Loading/Loading";
-import PaymentSelector from "app/component/Payment/PaymentSelector/PaymentSelector";
 import DualRangeSlider from "app/component/ProgressBar/DualRangeSlider";
 import BookResultList from "app/component/Search/BookResultList";
 import { Book } from "app/lib/books";

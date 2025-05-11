@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { BiCheck } from "react-icons/bi";
-import { Book } from "app/lib/books";
+import { Book, Review } from "app/lib/books";
 
 interface OrderItem {
   id: string;
@@ -11,7 +11,25 @@ interface OrderItem {
   quantity: number;
   orderable_type: string;
   orderable_id: number;
-  books?: Book[];
+  book?: Book[];
+  combo?: Combo[];
+}
+
+export interface Combo {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+  slug: string;
+  stock: number;
+  sold: number;
+  books: Book[];
+  quantity: number;
+  discount: string;
+  star_rating: number;
+  star_rating_count: number;
+  reviews: Review[];
 }
 
 interface OrderData {
@@ -69,7 +87,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               <div className="ml-4 flex-1">
                 <h3 className="font-medium text-gray-800">{item.name}</h3>
                 <p className="text-gray-600 text-sm">
-                  {item.books?.map((a) => a.title).join(", ")}
+                  {item.book?.map((a) => a.title).join(", ")}
                 </p>
 
                 <div className="flex justify-between items-end mt-2">

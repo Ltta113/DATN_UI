@@ -17,7 +17,7 @@ import { AllReviewsDrawer } from "./AllReviewsDrawer";
 
 type ReviewData = {
   reviews: Review[];
-  reviewableType: "book" | "author" | "order";
+  reviewableType: "book" | "author" | "order"| "combo";
   reviewableId: number;
   slug?: string;
   start_rating: number;

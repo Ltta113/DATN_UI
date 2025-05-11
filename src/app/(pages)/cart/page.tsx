@@ -17,12 +17,26 @@ import { useAuth } from "app/context/AuthContext";
 import { toast } from "react-toastify";
 import { useOrder } from "app/context/OrderContent";
 import { useRouter } from "next/navigation";
+import { Combo } from "app/component/Payment/OrderSummery/OrderSummery";
 
-type CartItem = Book & { id: string; quantity: number; selected?: boolean };
+type CartItem = (Book | Combo) & {
+  id: string;
+  quantity: number;
+  selected?: boolean;
+};
+
+const isBook = (
+  item: CartItem
+): item is Book & { id: string; quantity: number; selected?: boolean } => {
+  return "cover_image" in item;
+};
 
 type ErrorType = {
   message: string;
-  data: Book[];
+  data: {
+    books: Book[];
+    combos: Combo[];
+  };
 };
 
 export default function CartPage() {
@@ -32,7 +46,10 @@ export default function CartPage() {
   const router = useRouter();
   const [errors, setErrors] = useState<ErrorType>({
     message: "",
-    data: [],
+    data: {
+      books: [],
+      combos: [],
+    },
   });
 
   const { user } = useAuth();
@@ -51,7 +68,8 @@ export default function CartPage() {
       order_items: cartItems
         .filter((item) => item.selected)
         .map((item) => ({
-          book_id: Number(item.id),
+          orderable_id: Number(item.id),
+          orderable_type: isBook(item) ? "book" : "combo",
           quantity: item.quantity,
         })),
     };
@@ -63,7 +81,10 @@ export default function CartPage() {
           else toast.success("Cập nhật giỏ hàng thành công");
           setErrors({
             message: "",
-            data: [],
+            data: {
+              books: [],
+              combos: [],
+            },
           });
           setOrderData(data.order);
           if (type === "order") {
@@ -123,12 +144,19 @@ export default function CartPage() {
     };
   }, []);
 
-  const hasItemError = (itemId: number) => {
-    return errors.data.some((errorItem) => errorItem.id === itemId);
+  const hasItemError = (itemId: number, item: CartItem) => {
+    if (isBook(item)) {
+      return errors.data.books.some((errorItem) => errorItem.id === itemId);
+    }
+    return errors.data.combos.some((errorItem) => errorItem.id === itemId);
   };
 
-  const getItemStock = (itemId: number) => {
-    const errorItem = errors.data.find((item) => item.id === itemId);
+  const getItemStock = (itemId: number, item: CartItem) => {
+    if (isBook(item)) {
+      const errorItem = errors.data.books.find((item) => item.id === itemId);
+      return errorItem?.stock || 0;
+    }
+    const errorItem = errors.data.combos.find((item) => item.id === itemId);
     return errorItem?.stock || 0;
   };
 
@@ -142,8 +170,12 @@ export default function CartPage() {
       window.dispatchEvent(new Event("cartUpdated"));
       return;
     }
-    if (hasItemError(itemId)) {
-      const stock = getItemStock(itemId);
+
+    const item = cartItems.find((item) => item.id === itemId);
+    if (!item) return;
+
+    if (hasItemError(itemId, item)) {
+      const stock = getItemStock(itemId, item);
       if (newQuantity > stock) {
         toast.warning(`Chỉ còn ${stock} sản phẩm trong kho`);
         newQuantity = stock;
@@ -200,13 +232,17 @@ export default function CartPage() {
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
+  const getFinalPrice = (item: CartItem): number => {
+    if (isBook(item)) {
+      return Number(item.final_price);
+    }
+    return Number(item.price);
+  };
+
   const calculateSubtotal = () => {
     return cartItems
       .filter((item) => item.selected)
-      .reduce(
-        (total, item) => total + Number(item.final_price) * item.quantity,
-        0
-      );
+      .reduce((total, item) => total + getFinalPrice(item) * item.quantity, 0);
   };
 
   const calculatePricetotal = () => {
@@ -220,8 +256,7 @@ export default function CartPage() {
       .filter((item) => item.selected)
       .reduce(
         (total, item) =>
-          total +
-          (Number(item.price) - Number(item.final_price)) * item.quantity,
+          total + (Number(item.price) - getFinalPrice(item)) * item.quantity,
         0
       );
   };
@@ -358,7 +393,7 @@ export default function CartPage() {
                   <div
                     key={item.id}
                     className={`p-4 flex flex-col sm:flex-row ${
-                      hasItemError(item.id) ? "bg-red-50" : ""
+                      hasItemError(item.id, item) ? "bg-red-50" : ""
                     }`}
                   >
                     <div className="flex items-center mr-3">
@@ -374,7 +409,7 @@ export default function CartPage() {
 
                     <div className="sm:w-24 h-32 mb-4 sm:mb-0 flex-shrink-0">
                       <div className="relative h-full w-full bg-gray-100 rounded-md overflow-hidden">
-                        {item.cover_image ? (
+                        {isBook(item) ? (
                           <Image
                             src={item.cover_image}
                             alt={item.title}
@@ -383,9 +418,13 @@ export default function CartPage() {
                             className="rounded-md"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <span>No image</span>
-                          </div>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-md"
+                          />
                         )}
                       </div>
                     </div>
@@ -396,18 +435,23 @@ export default function CartPage() {
                           href={`/books/${item.id}`}
                           className="text-lg font-medium text-gray-800 hover:text-orange-500"
                         >
-                          {item.title}
+                          {isBook(item) ? item.title : item.name}
                         </Link>
-                        <p className="text-gray-600 text-sm mt-1">
-                          {item.authors.map((author) => author.name).join(", ")}
-                        </p>
+                        {isBook(item) && (
+                          <p className="text-gray-600 text-sm mt-1">
+                            {item.authors
+                              .map((author) => author.name)
+                              .join(", ")}
+                          </p>
+                        )}
 
                         {/* Thông báo lỗi cho từng sản phẩm */}
-                        {hasItemError(item.id) && (
+                        {hasItemError(item.id, item) && (
                           <div className="mt-2 text-red-600 flex items-center text-sm">
                             <BiErrorCircle className="mr-1" />
                             <span>
-                              Chỉ còn {getItemStock(item.id)} sản phẩm trong kho
+                              Chỉ còn {getItemStock(item.id, item)} sản phẩm
+                              trong kho
                             </span>
                           </div>
                         )}
@@ -417,7 +461,7 @@ export default function CartPage() {
                         {item.discount && (
                           <div className="mt-1">
                             <span className="font-semibold text-red-600">
-                              {formatPrice(Number(item.final_price))}
+                              {formatPrice(getFinalPrice(item))}
                             </span>
                             <span className="text-gray-500 text-sm line-through ml-2">
                               {formatPrice(Number(item.price))}
@@ -476,9 +520,7 @@ export default function CartPage() {
 
                             {/* Giá hiện tại */}
                             <div className="font-semibold text-red-600 ml-4">
-                              {formatPrice(
-                                Number(item.final_price) * item.quantity
-                              )}
+                              {formatPrice(getFinalPrice(item) * item.quantity)}
                             </div>
 
                             {/* Nút xóa */}

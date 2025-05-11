@@ -148,8 +148,8 @@ export default function OrderConfirmationPage() {
                     <div key={item.id} className="py-4 flex">
                       <div className="w-20 h-24 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
                         <Image
-                          src={item.book_image}
-                          alt={item.book_name}
+                          src={item.image}
+                          alt={item.name}
                           width={80}
                           height={96}
                           className="object-cover"
@@ -158,7 +158,7 @@ export default function OrderConfirmationPage() {
 
                       <div className="ml-4 flex-1">
                         <h3 className="font-medium text-gray-800">
-                          {item.book_name}
+                          {item.name}
                         </h3>
 
                         <div className="flex justify-between items-end mt-2 text-sm">

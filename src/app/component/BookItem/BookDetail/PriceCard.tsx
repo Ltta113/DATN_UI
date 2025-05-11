@@ -1,4 +1,5 @@
 import { Book } from "app/lib/books";
+import { Combo } from "app/component/Payment/OrderSummery/OrderSummery";
 import React, { useState, useEffect } from "react";
 import {
   BiBookOpen,
@@ -43,9 +44,7 @@ const PriceCard = ({ book }: { book: Book }) => {
   useEffect(() => {
     const checkCartStatus = () => {
       const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
-      const bookInCart = cart.find(
-        (item: Book & { quantity: number }) => item.id === book.id
-      );
+      const bookInCart = cart.find((item: Book | Combo) => item.id === book.id);
 
       if (bookInCart) {
         setIsInCart(true);
@@ -111,7 +110,7 @@ const PriceCard = ({ book }: { book: Book }) => {
 
     const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
 
-    if (!cart.some((item: Book) => item.id === book.id)) {
+    if (!cart.some((item: Book | Combo) => item.id === book.id)) {
       const updatedCart = [...cart, { ...book, quantity }];
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       setIsInCart(true);
@@ -123,7 +122,9 @@ const PriceCard = ({ book }: { book: Book }) => {
 
   const removeFromCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart") ?? "[]");
-    const updatedCart = cart.filter((item: Book) => item.id !== book.id);
+    const updatedCart = cart.filter(
+      (item: Book | Combo) => item.id !== book.id
+    );
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setIsInCart(false);
     setCartItem(null);
@@ -329,19 +330,6 @@ const PriceCard = ({ book }: { book: Book }) => {
             Thêm vào giỏ hàng
           </button>
         )}
-      </div>
-
-      <div className="px-4 pb-4">
-        <button
-          disabled={isSoldOut}
-          className={`w-full cursor-pointer py-3 rounded-md text-lg font-medium transition-colors shadow-md ${
-            isSoldOut
-              ? "bg-gray-400 text-white cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
-        >
-          Mua ngay
-        </button>
       </div>
     </div>
   );
