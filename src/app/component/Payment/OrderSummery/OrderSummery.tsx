@@ -1,16 +1,35 @@
 import React from "react";
 import Image from "next/image";
 import { BiCheck } from "react-icons/bi";
+import { Book, Review } from "app/lib/books";
 
 interface OrderItem {
   id: string;
-  book: {
-    cover_image: string;
-    title: string;
-    authors: { name: string }[];
-  };
+  name: string;
+  image: string;
   price: number;
   quantity: number;
+  orderable_type: string;
+  orderable_id: number;
+  book?: Book[];
+  combo?: Combo[];
+}
+
+export interface Combo {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+  slug: string;
+  stock: number;
+  sold: number;
+  books: Book[];
+  quantity: number;
+  discount: string;
+  star_rating: number;
+  star_rating_count: number;
+  reviews: Review[];
 }
 
 interface OrderData {
@@ -57,8 +76,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <div key={item.id} className="py-4 flex">
               <div className="w-20 h-24 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
                 <Image
-                  src={item.book.cover_image}
-                  alt={item.book.title}
+                  src={item.image}
+                  alt={item.name}
                   width={80}
                   height={96}
                   className="object-cover"
@@ -66,9 +85,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               </div>
 
               <div className="ml-4 flex-1">
-                <h3 className="font-medium text-gray-800">{item.book.title}</h3>
+                <h3 className="font-medium text-gray-800">{item.name}</h3>
                 <p className="text-gray-600 text-sm">
-                  {item.book.authors.map((a) => a.name).join(", ")}
+                  {item.book?.map((a) => a.title).join(", ")}
                 </p>
 
                 <div className="flex justify-between items-end mt-2">

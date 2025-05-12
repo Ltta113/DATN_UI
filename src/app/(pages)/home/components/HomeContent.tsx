@@ -3,6 +3,7 @@
 import BookShelf from "app/component/BookList/TopSeller/BookSelf";
 import DiscountSection from "app/component/Discount/DiscountSection/DiscountSection";
 import Loading from "app/component/Loading/Loading";
+import NavigationBar from "app/component/NavBar/NavigationBar";
 import BookSlider from "app/component/Slider/TopSlider/ImageSlider";
 import { Book, Discount } from "app/lib/books";
 import { useListDiscounts } from "hooks/useGetDiscounts";
@@ -19,6 +20,7 @@ const HomeContent = () => {
 
   return (
     <div className="container mx-auto py-8">
+      <NavigationBar />
       <h1 className="text-3xl font-bold mb-8 text-center">Sách mới nhất</h1>
 
       {isPending && <Loading />}

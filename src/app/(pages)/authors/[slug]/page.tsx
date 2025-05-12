@@ -135,7 +135,7 @@ export default function AuthorPage() {
               <div className="flex items-center mb-4">
                 <div className="flex justify-start items-center">
                   <span className="mr-2">
-                    Rating: {formatRating.format(author.star_rating ?? 0)}
+                    Đánh giá: {formatRating.format(author.star_rating ?? 0)}
                   </span>
                   <FiStar className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 </div>

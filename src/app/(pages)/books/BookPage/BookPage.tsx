@@ -61,7 +61,7 @@ export default function Search() {
   const isLoading = isPending || isChangingPage;
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container max-w-[80%] px-4 mx-auto py-8">
       <div className="flex items-center mb-6">
         <Link
           href="/"

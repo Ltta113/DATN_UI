@@ -17,7 +17,7 @@ import { AllReviewsDrawer } from "./AllReviewsDrawer";
 
 type ReviewData = {
   reviews: Review[];
-  reviewableType: "book" | "author" | "order";
+  reviewableType: "book" | "author" | "order" | "combo";
   reviewableId: number;
   slug?: string;
   start_rating: number;
@@ -79,6 +79,9 @@ const ProductReview = ({
           if (reviewableType === "book" && slug) {
             queryClient.invalidateQueries({ queryKey: ["book", slug] });
           }
+          if (reviewableType === "combo" && slug) {
+            queryClient.invalidateQueries({ queryKey: ["combo", slug] });
+          }
           toast.success("Xóa đánh giá thành công");
         },
         onError: () => {
@@ -122,6 +125,9 @@ const ProductReview = ({
             if (reviewableType === "book" && slug) {
               queryClient.invalidateQueries({ queryKey: ["book", slug] });
             }
+            if (reviewableType === "combo" && slug) {
+              queryClient.invalidateQueries({ queryKey: ["combo", slug] });
+            }
             toast.success("Gửi đánh giá thành công");
           },
           onError: () => {
@@ -160,6 +166,9 @@ const ProductReview = ({
             if (reviewableType === "book" && slug) {
               queryClient.invalidateQueries({ queryKey: ["book", slug] });
             }
+            if (reviewableType === "combo" && slug) {
+              queryClient.invalidateQueries({ queryKey: ["combo", slug] });
+            }
             toast.success("Cập nhật đánh giá thành công");
           },
           onError: () => {
@@ -174,22 +183,20 @@ const ProductReview = ({
     <div>
       <div className="flex border-b border-gray-300 mb-6">
         <button
-          className={`mr-6 py-2 px-1 font-medium text-lg cursor-pointer relative ${
-            activeTab === "reviews"
+          className={`mr-6 py-2 px-1 font-medium text-lg cursor-pointer relative ${activeTab === "reviews"
               ? "text-orange-500 border-b-2 border-orange-500"
               : "text-gray-600 hover:text-orange-500"
-          }`}
+            }`}
           onClick={() => setActiveTab("reviews")}
         >
           Đánh giá{" "}
           <span className="text-orange-500">({reviewsData.length})</span>
         </button>
         <button
-          className={`py-2 px-1 font-medium text-lg relative cursor-pointer ${
-            activeTab === "add-review"
+          className={`py-2 px-1 font-medium text-lg relative cursor-pointer ${activeTab === "add-review"
               ? "text-orange-500 border-b-2 border-orange-500"
               : "text-gray-600 hover:text-orange-500"
-          }`}
+            }`}
           onClick={() => setActiveTab("add-review")}
         >
           Viết đánh giá
@@ -283,11 +290,10 @@ const ProductReview = ({
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
                     key={star}
-                    className={`cursor-pointer text-2xl ${
-                      star <= (hoveredRating ?? rating)
+                    className={`cursor-pointer text-2xl ${star <= (hoveredRating ?? rating)
                         ? "text-amber-400"
                         : "text-gray-300"
-                    } mr-1`}
+                      } mr-1`}
                     onClick={() => setRating(star)}
                     onMouseEnter={() => setHoveredRating(star)}
                     onMouseLeave={() => setHoveredRating(star)}
@@ -330,8 +336,8 @@ const ProductReview = ({
                 {createReviewMutation.isPending
                   ? "Đang gửi..."
                   : dataReview
-                  ? "Sửa đánh giá của bạn"
-                  : "Gửi đánh giá"}
+                    ? "Sửa đánh giá của bạn"
+                    : "Gửi đánh giá"}
               </button>
             </div>
           </form>

@@ -5,7 +5,8 @@ import { Order } from "app/context/OrderContent";
 
 export interface OrderRequest {
     order_items: Array<{
-        book_id: number;
+        orderable_id: number;
+        orderable_type: string;
         quantity: number;
     }>;
 }

@@ -1,3 +1,4 @@
+import { Combo } from "app/component/Payment/OrderSummery/OrderSummery";
 import { User } from "app/context/AuthContext";
 
 export interface Book {
@@ -8,8 +9,10 @@ export interface Book {
   isbn: string | null;
   published_at: string | null;
   cover_image: string;
+  images: string[];
   price: string;
   stock: number;
+  sold: number;
   language: string;
   page_count: number;
   status: string;
@@ -21,6 +24,7 @@ export interface Book {
   reviews: Review[];
   final_price: string;
   discount: Discount;
+  combos: Combo[];
 }
 
 export interface Discount {
@@ -31,6 +35,7 @@ export interface Discount {
   expires_at: string;
   type: 'percent' | 'amount';
   value: number;
+  banner: string;
   books: Book[];
 }
 

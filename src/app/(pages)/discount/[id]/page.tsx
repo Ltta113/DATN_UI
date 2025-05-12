@@ -114,7 +114,7 @@ export default function DiscountDetailPage() {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-[80%] mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center mb-6">
           <Link
@@ -125,14 +125,30 @@ export default function DiscountDetailPage() {
             Trang chủ
           </Link>
           <span className="mx-2 text-gray-400">/</span>
-          <span className="text-gray-800 font-medium">Khuyến mãi</span>
+          <Link
+            href="/discounts"
+            className="text-gray-600 hover:text-orange-500 flex items-center"
+          >
+            Khuyến mãi
+          </Link>
           <span className="mx-2 text-gray-400">/</span>
           <span className="text-gray-800 font-medium">{discountData.name}</span>
         </div>
 
         {/* Discount Header */}
-        <div className="relative bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-6 mb-8 text-white">
-          <div className="absolute top-0 right-0 p-4">
+        <div className="relative bg-gradient-to-r from-red-500 to-red-400 rounded-lg p-6 mb-8 text-white">
+          {discountData.banner && (
+            <div className="mb-6 rounded-lg overflow-hidden">
+              <Image
+                src={discountData.banner}
+                alt={discountData.name}
+                width={1200}
+                height={400}
+                className="w-full h-[300px] object-cover"
+              />
+            </div>
+          )}
+          <div className="absolute bottom-15 right-4 p-2">
             <div className="bg-white rounded-lg p-3 shadow-md">
               <div className="text-center mb-2">
                 <p className="text-gray-600 text-sm font-medium">
@@ -182,9 +198,15 @@ export default function DiscountDetailPage() {
             <div>
               <p className="text-sm opacity-80">Mức giảm giá</p>
               <p className="font-medium mt-1 flex items-center">
-                <span className="bg-yellow-400 text-red-600 font-bold px-2 py-0.5 rounded mr-2">
-                  -{discountData.value}%
-                </span>
+                {discountData.type === "percent" ? (
+                  <span className="bg-yellow-400 text-red-600 font-bold px-2 py-0.5 rounded mr-2">
+                    -{discountData.value}%
+                  </span>
+                ) : (
+                  <span className="bg-yellow-400 text-red-600 font-bold px-2 py-0.5 rounded mr-2">
+                    -{formatPrice(discountData.value)} đ
+                  </span>
+                )}
                 cho tất cả sản phẩm
               </p>
             </div>
@@ -234,11 +256,10 @@ export default function DiscountDetailPage() {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <svg
                           key={star}
-                          className={`w-3 h-3 ${
-                            book.star_rating >= star
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
+                          className={`w-3 h-3 ${book.star_rating >= star
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                            }`}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >

@@ -45,7 +45,7 @@ export default function BestSoldPage() {
     const isLoading = isPending || isChangingPage;
 
     return (
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 max-w-[80%] px-4">
             <div className="flex items-center mb-6">
                 <Link
                     href="/"
@@ -55,7 +55,14 @@ export default function BestSoldPage() {
                     Trang chủ
                 </Link>
                 <span className="mx-2 text-gray-400">/</span>
-                <span className="text-gray-800 font-medium">Sách</span>
+                <Link
+                    href="/books"
+                    className="text-gray-600 hover:text-orange-500 flex items-center"
+                >
+                    Sách
+                </Link>
+                <span className="mx-2 text-gray-400">/</span>
+                <span className="text-gray-800 font-medium">Sách bán chạy</span>
             </div>
             <h1 className="text-3xl font-bold mb-8 text-center">
                 Danh sách sách bán chạy nhất
