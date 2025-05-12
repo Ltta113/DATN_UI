@@ -53,19 +53,6 @@ export default function ComboDetail({ combo }: Props) {
     ).values(),
   ];
 
-  // Calculate average rating across all books
-  const ratings = combo.books
-    .map((book) => Number(book.star_rating) || 0)
-    .filter((rating) => rating > 0);
-  const averageRating =
-    ratings.length > 0
-      ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-      : 0;
-  const totalRatings = (combo.books as Book[]).reduce(
-    (sum, book) => sum + (book.star_rating || 0),
-    0
-  );
-
   // Function to render stars
   const renderStars = (rating: number) => {
     const stars = [];
@@ -210,9 +197,9 @@ export default function ComboDetail({ combo }: Props) {
               </div>
 
               <div className="flex items-center mt-2">
-                <div className="flex">{renderStars(averageRating)}</div>
+                <div className="flex">{renderStars(combo.star_rating || 0)}</div>
                 <span className="ml-2 text-sm text-gray-600">
-                  ({totalRatings} đánh giá)
+                  ({combo.star_rating_count} đánh giá)
                 </span>
                 <span className="mx-2 text-gray-300">|</span>
                 <span className="text-sm text-gray-600">

@@ -210,21 +210,19 @@ export default function OrderDetail() {
       {/* Tab Navigation */}
       <div className="flex border-b mb-6">
         <button
-          className={`px-4 py-2 mr-2 font-medium cursor-pointer ${
-            activeTab === "info"
+          className={`px-4 py-2 mr-2 font-medium cursor-pointer ${activeTab === "info"
               ? "border-b-2 border-orange-500 text-orange-500"
               : "text-gray-500"
-          }`}
+            }`}
           onClick={() => setActiveTab("info")}
         >
           Thông Tin Đơn Hàng
         </button>
         <button
-          className={`px-4 py-2 font-medium cursor-pointer ${
-            activeTab === "items"
+          className={`px-4 py-2 font-medium cursor-pointer ${activeTab === "items"
               ? "border-b-2 border-orange-500 text-orange-500"
               : "text-gray-500"
-          }`}
+            }`}
           onClick={() => setActiveTab("items")}
         >
           Sản Phẩm ({order.order_items_count})
@@ -278,34 +276,6 @@ export default function OrderDetail() {
                   </p>
                 </div>
               </div>
-
-              {/* {order.star_rating > 0 && (
-                <div className="flex items-start">
-                  <FiStar className="text-gray-500 mt-1 mr-3" />
-                  <div>
-                    <p className="text-sm text-gray-500">Đánh giá</p>
-                    <div className="flex items-center">
-                      <span className="font-medium mr-2">
-                        {order.star_rating}/5
-                      </span>
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <span
-                            key={i}
-                            className={
-                              i < Math.floor(order.star_rating)
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }
-                          >
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )} */}
             </div>
           </div>
 

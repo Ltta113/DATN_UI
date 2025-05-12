@@ -19,7 +19,7 @@ export default function CombosPage() {
   if (!data?.data) return <div>Không tìm thấy combo nào</div>;
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 max-w-[80%] px-4">
       <div className="flex items-center mb-6">
         <Link
           href="/"

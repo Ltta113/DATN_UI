@@ -14,6 +14,7 @@ import { useAuth } from "app/context/AuthContext";
 export default function ComboDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
+  console.log(slug);
   const { user } = useAuth();
 
   const [prevSlug, setPrevSlug] = useState(slug);
@@ -39,7 +40,7 @@ export default function ComboDetailPage() {
   );
 
   return (
-    <div className="container mx-auto py-8 w-[80%] mx-auto">
+    <div className="container mx-auto py-8 max-w-[80%] px-4">
       <div className="flex items-center mb-6">
         <Link
           href="/"

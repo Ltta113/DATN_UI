@@ -22,7 +22,7 @@ const ComboList: React.FC<ComboListProps> = ({ combos, pagination, currentPage }
         {combos.map((combo) => (
           <Link
             key={combo.id}
-            href={`/combos/${combo.slug || combo.id}`}
+            href={`/combos/${combo.slug}`}
             className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="relative aspect-square">

@@ -126,7 +126,7 @@ export default function CartPage() {
 
         setSelectAll(
           cartWithSelection.length > 0 &&
-            cartWithSelection.every((item) => item.selected)
+          cartWithSelection.every((item) => item.selected)
         );
       } catch {
         setCartItems([]);
@@ -288,19 +288,19 @@ export default function CartPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 min-h-screen">
-        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
-          <div className="flex items-center mb-6">
-            <Link
-              href="/"
-              className="text-gray-600 hover:text-orange-500 flex items-center"
-            >
-              <BiHomeAlt className="mr-2" />
-              Trang chủ
-            </Link>
-            <span className="mx-2 text-gray-400">/</span>
-            <span className="text-gray-800 font-medium">Giỏ hàng</span>
-          </div>
+      <div className="container mx-auto px-4 py-8 min-h-screen max-w-[80%]">
+        <div className="flex items-center mb-6">
+          <Link
+            href="/"
+            className="text-gray-600 hover:text-orange-500 flex items-center"
+          >
+            <BiHomeAlt className="mr-2" />
+            Trang chủ
+          </Link>
+          <span className="mx-2 text-gray-400">/</span>
+          <span className="text-gray-800 font-medium">Giỏ hàng</span>
+        </div>
+        <div className="max-w-3xl mx-auto bg-gray-100 rounded-lg shadow-lg p-6">
 
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -392,9 +392,8 @@ export default function CartPage() {
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-4 flex flex-col sm:flex-row ${
-                      hasItemError(item.id, item) ? "bg-red-50" : ""
-                    }`}
+                    className={`p-4 flex flex-col sm:flex-row ${hasItemError(item.id, item) ? "bg-red-50" : ""
+                      }`}
                   >
                     <div className="flex items-center mr-3">
                       <div
@@ -485,11 +484,10 @@ export default function CartPage() {
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
-                                className={`px-2 py-1 text-gray-700 ${
-                                  item.quantity <= 1
+                                className={`px-2 py-1 text-gray-700 ${item.quantity <= 1
                                     ? "text-gray-300 cursor-not-allowed"
                                     : "hover:bg-gray-100"
-                                }`}
+                                  }`}
                                 disabled={item.quantity <= 1}
                               >
                                 <span className="text-lg font-medium">−</span>
@@ -600,13 +598,12 @@ export default function CartPage() {
                 </div>
 
                 <button
-                  className={`w-full py-3 rounded-md text-lg font-medium transition-colors mt-4 ${
-                    getSelectedCount() > 0
+                  className={`w-full py-3 rounded-md text-lg font-medium transition-colors mt-4 ${getSelectedCount() > 0
                       ? isPending
                         ? "bg-orange-300 text-white cursor-not-allowed"
                         : "bg-orange-500 hover:bg-orange-600 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                    }`}
                   disabled={getSelectedCount() === 0 || isPending}
                   onClick={(e) => handleSubmit(e, "order")}
                 >

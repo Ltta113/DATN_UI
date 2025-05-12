@@ -35,6 +35,7 @@ export interface Discount {
   expires_at: string;
   type: 'percent' | 'amount';
   value: number;
+  banner: string;
   books: Book[];
 }
 

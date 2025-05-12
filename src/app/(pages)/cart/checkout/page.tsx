@@ -102,23 +102,23 @@ export default function OrderConfirmationPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-[80%]">
+      <div className="flex items-center mb-6">
+        <Link
+          href="/"
+          className="text-gray-600 hover:text-orange-500 flex items-center"
+        >
+          <BiHomeAlt className="mr-2" />
+          Trang chủ
+        </Link>
+        <span className="mx-2 text-gray-400">/</span>
+        <Link href="/cart" className="text-gray-600 hover:text-orange-500">
+          Giỏ hàng
+        </Link>
+        <span className="mx-2 text-gray-400">/</span>
+        <span className="text-gray-800 font-medium">Xác nhận đơn hàng</span>
+      </div>
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center mb-6">
-          <Link
-            href="/"
-            className="text-gray-600 hover:text-orange-500 flex items-center"
-          >
-            <BiHomeAlt className="mr-2" />
-            Trang chủ
-          </Link>
-          <span className="mx-2 text-gray-400">/</span>
-          <Link href="/cart" className="text-gray-600 hover:text-orange-500">
-            Giỏ hàng
-          </Link>
-          <span className="mx-2 text-gray-400">/</span>
-          <span className="text-gray-800 font-medium">Xác nhận đơn hàng</span>
-        </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Chi tiết đơn hàng */}
@@ -242,11 +242,10 @@ export default function OrderConfirmationPage() {
                 <div className="mt-6">
                   <button
                     onClick={handleProcessOrder}
-                    className={`w-full py-3 px-4 rounded-md text-white font-medium transition-colors ${
-                      isProcessing
+                    className={`w-full py-3 px-4 rounded-md text-white font-medium transition-colors ${isProcessing
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-orange-500 hover:bg-orange-600"
-                    }`}
+                      }`}
                     disabled={isProcessing}
                   >
                     {isProcessing ? (
