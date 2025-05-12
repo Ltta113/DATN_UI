@@ -12,7 +12,7 @@ interface NavItemProps {
     color?: string;
 }
 
-const NavItem = ({ icon, label, route, active = false, color }: NavItemProps) => {
+const NavItem = ({ icon, label, route, color }: NavItemProps) => {
     const router = useRouter();
 
     const handleClick = () => {
@@ -40,7 +40,7 @@ const NavigationBar = () => {
         {
             icon: <FiZap size={30} className="bg-red-400" />,
             label: "Khuyến Mãi",
-            route: "/discount",
+            route: "/discounts",
             color: "bg-red-400"
         },
         {
