@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useLogin } from "hooks/useLogin";
 import { GoogleButton } from "app/component/Auth/GoogleButton";
 import { FacebookButton } from "app/component/Auth/FacebookButton";

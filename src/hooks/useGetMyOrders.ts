@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Feedback } from "app/component/Feedback/OrderFeedback";
 import { OrderItem } from "app/context/OrderContent";
 import axios from "axios";
 import { ResponseData } from "types/responseData";
@@ -18,6 +19,7 @@ export interface Order {
   district: string;
   province: string;
   order_items: OrderItem[];
+  feedback: Feedback;
   order_code: string;
   created_at: string;
   updated_at: string;

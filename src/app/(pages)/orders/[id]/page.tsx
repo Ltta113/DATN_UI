@@ -1,5 +1,6 @@
 "use client";
 
+import OrderFeedback from "app/component/Feedback/OrderFeedback";
 import { useCancelOrder } from "hooks/useCancelOrder";
 import { useCompleterOrder } from "hooks/useCompleteOrder";
 import { Order } from "hooks/useGetMyOrders";
@@ -211,8 +212,8 @@ export default function OrderDetail() {
       <div className="flex border-b mb-6">
         <button
           className={`px-4 py-2 mr-2 font-medium cursor-pointer ${activeTab === "info"
-              ? "border-b-2 border-orange-500 text-orange-500"
-              : "text-gray-500"
+            ? "border-b-2 border-orange-500 text-orange-500"
+            : "text-gray-500"
             }`}
           onClick={() => setActiveTab("info")}
         >
@@ -220,8 +221,8 @@ export default function OrderDetail() {
         </button>
         <button
           className={`px-4 py-2 font-medium cursor-pointer ${activeTab === "items"
-              ? "border-b-2 border-orange-500 text-orange-500"
-              : "text-gray-500"
+            ? "border-b-2 border-orange-500 text-orange-500"
+            : "text-gray-500"
             }`}
           onClick={() => setActiveTab("items")}
         >
@@ -462,6 +463,7 @@ export default function OrderDetail() {
           Liên Hệ Hỗ Trợ
         </button>
       </div>
+      <OrderFeedback order={order} feedbackInit={order.feedback} />
     </div>
   );
 }
