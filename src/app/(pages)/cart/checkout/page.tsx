@@ -95,7 +95,6 @@ export default function OrderConfirmationPage() {
         setIsProcessing(false);
 
         setErrorData(data?.response?.data as OrderErrors);
-        toast.error("eweqeqwe");
         toast.error(data?.response?.data.message);
       },
     });
