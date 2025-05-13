@@ -211,19 +211,21 @@ export default function OrderDetail() {
       {/* Tab Navigation */}
       <div className="flex border-b mb-6">
         <button
-          className={`px-4 py-2 mr-2 font-medium cursor-pointer ${activeTab === "info"
-            ? "border-b-2 border-orange-500 text-orange-500"
-            : "text-gray-500"
-            }`}
+          className={`px-4 py-2 mr-2 font-medium cursor-pointer ${
+            activeTab === "info"
+              ? "border-b-2 border-orange-500 text-orange-500"
+              : "text-gray-500"
+          }`}
           onClick={() => setActiveTab("info")}
         >
           Thông Tin Đơn Hàng
         </button>
         <button
-          className={`px-4 py-2 font-medium cursor-pointer ${activeTab === "items"
-            ? "border-b-2 border-orange-500 text-orange-500"
-            : "text-gray-500"
-            }`}
+          className={`px-4 py-2 font-medium cursor-pointer ${
+            activeTab === "items"
+              ? "border-b-2 border-orange-500 text-orange-500"
+              : "text-gray-500"
+          }`}
           onClick={() => setActiveTab("items")}
         >
           Sản Phẩm ({order.order_items_count})
@@ -463,7 +465,11 @@ export default function OrderDetail() {
           Liên Hệ Hỗ Trợ
         </button>
       </div>
-      <OrderFeedback order={order} feedbackInit={order.feedback} />
+      <OrderFeedback
+        order={order}
+        feedbackInit={order.feedback}
+        refetch={refetch}
+      />
     </div>
   );
 }
