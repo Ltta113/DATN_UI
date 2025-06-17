@@ -1,28 +1,63 @@
 "use client";
 
 import { Order, useGetMyOrders } from "hooks/useGetMyOrders";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiShoppingBag,
-  FiClock,
   FiCalendar,
-  FiMapPin,
-  FiPhone,
-  FiUser,
-  FiDollarSign,
+  FiSearch,
+  FiChevronUp,
+  FiChevronDown,
 } from "react-icons/fi";
 import Loading from "../Loading/Loading";
 import { useRouter } from "next/navigation";
 
 export default function UserOrderList() {
   const { data, isPending } = useGetMyOrders();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const router = useRouter();
 
-  const orders = (data as Order[]) || [];
+  useEffect(() => {
+    const orders = (data as Order[]) || [];
+    if (orders.length) {
+      let filtered = [...orders];
+
+      if (searchTerm) {
+        filtered = filtered.filter((order) =>
+          (order.order_code || order.id)
+            .toString()
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+        );
+      }
+
+      filtered.sort((a, b) => {
+        const dateA = new Date(a.created_at).getTime();
+        const dateB = new Date(b.created_at).getTime();
+        return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+      });
+
+      setFilteredOrders(filtered);
+    } else {
+      setFilteredOrders([]);
+    }
+  }, [data, searchTerm, sortOrder]);
+
+  const formatCurrency = (amount: string) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(Number(amount));
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
       year: "numeric",
       month: "numeric",
       day: "numeric",
@@ -87,150 +122,104 @@ export default function UserOrderList() {
     }
   };
 
-  const getPaymentMethodTranslation = (method: string) => {
-    switch (method) {
-      case "wallet":
-        return "Ví tiền";
-      case "bank_transfer":
-        return "Chuyển khoản ngân hàng";
-      case "credit_card":
-        return "Thẻ tín dụng";
-      case "momo":
-        return "Ví MoMo";
-      case "zalopay":
-        return "Zalopay";
-      default:
-        return method;
-    }
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
   };
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-center mb-6">Đơn Hàng Của Tôi</h1>
-      {isPending && <Loading />}
 
-      {!isPending && orders.length === 0 ? (
+      {/* Search and Sort Controls */}
+      <div className="flex flex-col sm:flex-row justify-between mb-6 gap-4">
+        <div className="relative flex-1">
+          <div className="absolute inset-y-1 left-1 pt-3 pl-3 flex items-center pointer-events-none">
+            <FiSearch className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            className="pl-10 w-full p-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500"
+            placeholder="Tìm kiếm theo mã đơn hàng"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <button
+          onClick={toggleSortOrder}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+        >
+          <FiCalendar />
+          <span>Sắp xếp theo ngày</span>
+          {sortOrder === "desc" ? <FiChevronDown /> : <FiChevronUp />}
+        </button>
+      </div>
+      
+      {!isPending && filteredOrders.length === 0 ? (
         <div className="text-center py-8">
           <FiShoppingBag className="mx-auto text-4xl text-gray-400 mb-4" />
-          <p className="text-gray-500">Bạn chưa có đơn hàng nào</p>
+          <p className="text-gray-500">
+            {searchTerm
+              ? "Không tìm thấy đơn hàng phù hợp"
+              : "Bạn chưa có đơn hàng nào"}
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="border rounded-lg p-4 hover:shadow-md transition"
-            >
-              <div className="flex justify-between mb-3">
-                <span className="text-sm font-medium text-gray-500">
-                  Mã đơn: #{order.id}
-                </span>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(
-                    order.status
-                  )}`}
-                >
-                  {getStatusTranslation(order.status)}
-                </span>
-              </div>
-
-              <div className="space-y-2 mb-3">
-                <div className="flex items-start">
-                  <FiCalendar className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Ngày đặt hàng</p>
-                    <p className="text-sm font-medium">
-                      {formatDate(order.created_at)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiDollarSign className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Tổng thanh toán</p>
-                    <p className="text-sm font-medium">
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(Number(order.total_amount))}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiShoppingBag className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Số lượng sản phẩm</p>
-                    <p className="text-sm font-medium">
-                      {order.order_items_count}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiUser className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Người nhận</p>
-                    <p className="text-sm font-medium">{order.name}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiMapPin className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Địa chỉ</p>
-                    <p className="text-sm font-medium text-ellipsis overflow-hidden">
-                      {order.address}, {order.ward}, {order.district},{" "}
-                      {order.province}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiPhone className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">Số điện thoại</p>
-                    <p className="text-sm font-medium">{order.phone}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <FiClock className="text-gray-500 mt-1 mr-2" />
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      Phương thức thanh toán
-                    </p>
-                    <p className="text-sm font-medium">
-                      {getPaymentMethodTranslation(order.payment_method)}
-                    </p>
-                  </div>
-                </div>
-
-                {order.note && (
-                  <div className="mt-2 p-2 bg-gray-50 rounded-md">
-                    <p className="text-sm text-gray-500">Ghi chú:</p>
-                    <p className="text-sm">{order.note}</p>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => router.push(`/orders/${order.id}`)}
-                className="w-full cursor-pointer text-center mt-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition"
-              >
-                Xem Chi Tiết
-              </button>
+        <div className="overflow-x-auto">
+          <div className="min-w-full inline-block align-middle">
+            <div className="overflow-hidden">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      Mã đơn
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      Ngày đặt
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      Tổng tiền
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      Trạng thái
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => router.push(`/orders/${order.id}`)}
+                    >
+                      <td className="px-4 py-4 text-sm font-medium text-gray-700">
+                        #{order.order_code || order.id}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-600">
+                        {formatDate(order.created_at)}
+                      </td>
+                      <td className="px-4 py-4 text-sm font-medium text-gray-800">
+                        {formatCurrency(order.total_amount)}
+                      </td>
+                      <td className="px-4 py-4">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(
+                            order.status
+                          )}`}
+                        >
+                          {getStatusTranslation(order.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))}
+          </div>
         </div>
       )}
 
-      <div className="mt-6 flex justify-center">
-        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg">
-          Xem Thêm
-        </button>
-      </div>
+      {isPending && <Loading />}
     </div>
   );
 }

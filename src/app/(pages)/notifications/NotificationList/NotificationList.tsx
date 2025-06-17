@@ -155,11 +155,6 @@ export default function UserNotificationList() {
                   <div className="flex items-center text-sm text-gray-500">
                     <FiClock className="mr-1" />
                     <span>{formatDate(notification.created_at)}</span>
-                    {notification.order_code && (
-                      <span className="ml-3">
-                        Mã đơn hàng: #{notification.order_code}
-                      </span>
-                    )}
                   </div>
                 </div>
                 <div className="ml-4 flex items-start">

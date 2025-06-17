@@ -7,6 +7,13 @@ interface BookCardProps {
     book: Book;
 }
 
+const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
 const BookCard = ({ book }: BookCardProps) => {
     return (
         <Link href={`/books/${book.slug}`}>
@@ -29,7 +36,9 @@ const BookCard = ({ book }: BookCardProps) => {
                     ))}
                 </p>
                 {book.price && (
-                    <p className="text-sm font-bold text-amber-600 text-left w-full mt-1">{book.price}</p>
+                    <p className="text-sm font-bold text-amber-600 text-left w-full mt-1">
+                        {formatPrice(Number(book.price))}
+                    </p>
                 )}
             </div>
         </Link>

@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import OrderFeedback from "app/component/Feedback/OrderFeedback";
 import { useCancelOrder } from "hooks/useCancelOrder";
-import { useCompleterOrder } from "hooks/useCompleteOrder";
 import { Order } from "hooks/useGetMyOrders";
 import { useGetOrderDetail } from "hooks/useGetOrderDetail";
 import { useReceivedOrder } from "hooks/useReceivedOrder";
@@ -33,14 +33,13 @@ export default function OrderDetail() {
   const { data, isPending, refetch } = useGetOrderDetail(orderId);
   const { mutate } = useCancelOrder();
   const { mutate: confirmReceived } = useReceivedOrder();
-  const { mutate: completeOrder } = useCompleterOrder();
   const { mutate: refundOrder } = useRefundOrder();
 
   const order = data as Order;
   const [activeTab, setActiveTab] = useState("info");
   const isCancelOrder =
     order?.status === "pending" ||
-    (order?.status === "paid" && order?.payment_method !== "cod");
+    (order?.status === "completed" && order?.payment_method === "cod");
 
   const handleCancelOrder = () => {
     if (orderId) {
@@ -69,20 +68,6 @@ export default function OrderDetail() {
     }
   };
 
-  const handleConfirmComplete = () => {
-    if (orderId) {
-      completeOrder(orderId, {
-        onSuccess: () => {
-          toast.success("Đơn hàng đã được xác nhận hoàn tất!");
-          refetch();
-        },
-        onError: () => {
-          toast.error("Đã xảy ra lỗi khi xác nhận đơn hàng!");
-        },
-      });
-    }
-  };
-
   const handleRequestRefund = () => {
     if (orderId) {
       refundOrder(orderId, {
@@ -90,8 +75,8 @@ export default function OrderDetail() {
           toast.success("Yêu cầu hoàn tiền đã được gửi!");
           refetch();
         },
-        onError: () => {
-          toast.error("Đã xảy ra lỗi khi yêu cầu hoàn tiền!");
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       });
     }
@@ -166,8 +151,8 @@ export default function OrderDetail() {
     switch (method) {
       case "wallet":
         return "Ví tiền";
-      case "bank_transfer":
-        return "Chuyển khoản ngân hàng";
+      case "cod":
+        return "Thanh toán tiền mặt";
       case "credit_card":
         return "Thẻ tín dụng";
       case "momo":
@@ -442,28 +427,20 @@ export default function OrderDetail() {
           </button>
         )}
 
-        {order?.status === "received" && (
-          <>
-            <button
-              className="px-4 cursor-pointer py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition"
-              onClick={handleConfirmComplete}
-            >
-              Xác Nhận Hoàn Tất
-            </button>
-            <button
-              className="px-4 cursor-pointer py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition"
-              onClick={handleRequestRefund}
-            >
+        {order?.status === "completed" && order?.payment_method !== "cod" && (
+          <button
+            className="px-4 cursor-pointer py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition"
+            onClick={handleRequestRefund}
+          >
               Yêu Cầu Hoàn Tiền
-            </button>
-          </>
+          </button>
         )}
-        <button className="px-4 cursor-pointer py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition">
+        {/* <button className="px-4 cursor-pointer py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg transition">
           In Đơn Hàng
         </button>
         <button className="px-4 cursor-pointer py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition">
           Liên Hệ Hỗ Trợ
-        </button>
+        </button> */}
       </div>
       <OrderFeedback
         order={order}

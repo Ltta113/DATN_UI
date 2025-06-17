@@ -6,10 +6,10 @@ import { Book } from "app/lib/books";
 import { useBestSoldBooks } from "hooks/useGetBestSoldBook";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { BiHomeAlt } from "react-icons/bi";
 
-export default function BestSoldPage() {
+function BestSoldContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -88,5 +88,13 @@ export default function BestSoldPage() {
                 }
             })()}
         </div>
+    );
+}
+
+export default function BestSoldPage() {
+    return (
+        <Suspense fallback={<Loading />}>
+            <BestSoldContent />
+        </Suspense>
     );
 }

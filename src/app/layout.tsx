@@ -10,6 +10,7 @@ import Header from "./component/Layout/Main/Header";
 import { AuthProvider } from "./context/AuthContext";
 import Footer from "./component/Layout/Main/Footer";
 import { OrderProvider } from "./context/OrderContent";
+import { Suspense } from "react";
 config.autoAddCss = false;
 
 const geistSans = Geist({
@@ -37,27 +38,29 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}
       >
-        <QueryProvider>
-          <AuthProvider>
-            <OrderProvider>
-              <Header />
-              {children}
-              <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-              />
-              <Footer />
-            </OrderProvider>
-          </AuthProvider>
-        </QueryProvider>
+        <Suspense>
+          <QueryProvider>
+            <AuthProvider>
+              <OrderProvider>
+                <Header />
+                {children}
+                <ToastContainer
+                  position="top-right"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="light"
+                />
+                <Footer />
+              </OrderProvider>
+            </AuthProvider>
+          </QueryProvider>
+        </Suspense>
       </body>
     </html>
   );

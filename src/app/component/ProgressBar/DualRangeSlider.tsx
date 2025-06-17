@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useRef, useState, useEffect } from 'react';
@@ -27,7 +28,7 @@ const DualRangeSlider = ({
 
     useEffect(() => {
         if (onChange) onChange({ min: minVal, max: maxVal });
-    }, [minVal, maxVal]);
+    }, [minVal, maxVal, onChange]);
 
     const getPercent = (value: number) => ((value - min) / (max - min)) * 100;
 

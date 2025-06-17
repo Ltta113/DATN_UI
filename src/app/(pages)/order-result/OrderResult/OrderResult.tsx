@@ -152,7 +152,7 @@ const formatCurrency = (amount: number | string): string => {
           href="/orders"
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
-          Xem đơn hàng
+          Xem danh sách đơn hàng
         </Link>
         <Link
           href="/"

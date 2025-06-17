@@ -31,7 +31,7 @@ const BookMarkPage: NextPage = () => {
 
             <main className="container mx-auto px-4 py-8">
                 <BookSection
-                    title="Sách đã đánh dấu"
+                    title="Sách yêu thích"
                     viewAllLink="/bookmarks"
                     books={bookMark}
                     isLoading={isBookMarkPending}

@@ -21,7 +21,7 @@ const HomeContent = () => {
   return (
     <div className="container mx-auto py-8">
       <NavigationBar />
-      <h1 className="text-3xl font-bold mb-8 text-center">Sách mới nhất</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center mt-4">Sách mới nhất</h1>
 
       {isPending && <Loading />}
       {isError && (
@@ -31,7 +31,7 @@ const HomeContent = () => {
       {!isPending && !isError && books && <BookShelf books={books} />}
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">Sách bán chạy nhất</h1>
+        <h1 className="text-2xl font-bold mb-6">Sách bán mới nhất</h1>
         <BookSlider />
       </div>
       {isPendingDiscount && <Loading />}

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FiHome,
   FiBookmark,
@@ -16,6 +17,20 @@ import { useAuth } from "app/context/AuthContext";
 
 const Sidebar = () => {
   const { logout } = useAuth();
+  const pathname = usePathname();
+
+  // Hàm kiểm tra đường dẫn active
+  const isActive = (href: string) => pathname === href;
+
+  const navItems = [
+    { href: "/", label: "Trang chủ", icon: <FiHome size={20} /> },
+    { href: "/library", label: "Thư viện của tôi", icon: <FiBookOpen size={20} /> },
+    { href: "/bookmarks", label: "Yêu thích", icon: <FiBookmark size={20} /> },
+    { href: "/wallet", label: "Ví tiền", icon: <BsWallet2 size={20} /> },
+    { href: "/orders", label: "Đơn hàng của tôi", icon: <FiPackage size={20} /> },
+    { href: "/profile", label: "Thông tin cá nhân", icon: <FiUser size={20} /> },
+    { href: "/notifications", label: "Thông báo của tôi", icon: <FiHeadphones size={20} /> },
+  ];
 
   return (
     <div className="m-2 h-screen flex flex-col justify-between py-8 bg-white w-64 shadow-sm rounded-md">
@@ -28,69 +43,21 @@ const Sidebar = () => {
       <div className="flex-grow">
         <nav className="px-4">
           <ul className="space-y-6">
-            <li>
-              <Link
-                href="/"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <FiHome className="mr-3" size={20} />
-                <span>Trang chủ</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/library"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <FiBookOpen className="mr-3" size={20} />
-                <span>Thư viện của tôi</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/bookmarks"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <FiBookmark className="mr-3" size={20} />
-                <span>Đánh dấu</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/wallet"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <BsWallet2 className="mr-3" size={20} />
-                <span>Ví tiền</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/orders"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <FiPackage className="mr-3" size={20} />
-                <span>Đơn hàng của tôi</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/profile"
-                className="flex items-center text-orange-500 font-medium"
-              >
-                <FiUser className="mr-3" size={20} />
-                <span>Thông tin cá nhân</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/notifications"
-                className="flex items-center text-gray-600 hover:text-orange-500"
-              >
-                <FiHeadphones className="mr-3" size={20} />
-                <span>Thông báo của tôi</span>
-              </Link>
-            </li>
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center ${
+                    isActive(item.href)
+                      ? "text-orange-500 font-medium"
+                      : "text-gray-600 hover:text-orange-500"
+                  }`}
+                >
+                  <div className="mr-3">{item.icon}</div>
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
             <li>
               <button
                 onClick={logout}

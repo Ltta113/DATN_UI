@@ -4,7 +4,7 @@ import CategoryContent from "app/(pages)/home/components/CategoryContent";
 import { useAuth } from "app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Category } from "app/lib/books";
 import { useListNotification } from "hooks/useGetNotification";
@@ -26,6 +26,7 @@ interface Notification {
 export default function Header() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const router = useRouter();
@@ -35,6 +36,14 @@ export default function Header() {
   const notificationRef = useRef<HTMLDivElement>(null);
 
   const { data } = useListNotification(1, 5);
+
+  useEffect(() => {
+    const queryFromUrl = searchParams?.get("query") || "";
+    const categoryFromUrl = searchParams?.get("category") || "";
+
+    setSearchQuery(queryFromUrl);
+    setSelectedCategory(categoryFromUrl);
+  }, [searchParams]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -177,6 +186,7 @@ export default function Header() {
                 : notification
             )
           );
+          setNotificationCount(notificationCount - 1);
           if (data.order_code) {
             router.push(`/orders/${data.order_code}`);
           }
@@ -334,11 +344,6 @@ export default function Header() {
                         <p className="text-xs text-gray-600 mt-1 line-clamp-2">
                           {notification.message}
                         </p>
-                        {notification.order_code && (
-                          <span className="mt-1 inline-block text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded">
-                            Đơn hàng: {notification.order_code}
-                          </span>
-                        )}
                       </div>
                     ))
                   )}
